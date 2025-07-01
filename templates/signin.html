@@ -1,0 +1,220 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PerfectMatch | sign in</title>
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/auth.css' %}" />
+    <style>
+      h5 {
+        color: red;
+      }
+
+      /* Cookie Banner Styles */
+      .cookie-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #222;
+        color: #fff;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .cookie-banner p {
+        margin: 0;
+        font-size: 0.9rem;
+      }
+
+      .cookie-banner button {
+        background-color: #00b894;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .cookie-banner button:hover {
+        background-color: #019875;
+      }
+
+      /* Form blocking styles */
+      .form-blocked {
+        pointer-events: none !important;
+        opacity: 0.5 !important;
+        position: relative;
+      }
+
+      .cookie-warning {
+        color: #ff4757 !important;
+        font-weight: bold !important;
+        text-align: center;
+        margin: 10px 0;
+        font-size: 0.9rem;
+      }
+
+      /* Hidden class */
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body class="auth-page dark-theme">
+    <div class="auth-container">
+      <div class="auth-sidebar">
+        <div class="logo">PerfectMatch</div>
+        <p class="tagline">
+            Discover meaningful connections and meet new people in a trusted, modern dating space.
+        </p>
+      </div>
+      <div class="auth-content">
+        <h2>Sign In</h2>
+
+        <div>
+          {% for message in messages %}
+          <h5>{{message}}</h5>
+          {% endfor %}
+        </div>
+
+        <!-- Cookie Warning Message -->
+        <div id="cookie-warning" class="cookie-warning hidden">
+          ⚠️ You must accept cookies to sign in.
+        </div>
+
+        <form
+          action="{% url 'signin' %}"
+          method="POST"
+          class="auth-form"
+          id="signinForm">
+          {% csrf_token %}
+          <!--email-->
+          <div class="input-group">
+            <label for="signin-email">Username</label>
+            <input
+              type="text"
+              id="signin-email"
+              name="signin-username"
+              required />
+          </div>
+          <!--password-->
+          <div class="input-group">
+            <label for="signin-password">Password</label>
+            <input
+              type="password"
+              id="signin-password"
+              name="signin-password"
+              required />
+          </div>
+          <!--signin-->
+          <button type="submit" class="auth-button primary-button">
+            Sign In
+          </button>
+        </form>
+        <!--forgot-->
+        <div class="auth-links">
+          <a href="/forgotpass">Forgot your password?</a>
+          <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+        </div>
+      </div>
+      <!--legal-->
+      <div class="auth-footer">
+        <ul>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/help">Help</a></li>
+          <li><a href="/services">Services</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" class="cookie-banner hidden">
+      <p>
+        This site uses cookies to enhance your experience. You must accept to
+        proceed.
+      </p>
+      <button id="accept-cookies">Accept Cookies</button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const cookieBanner = document.getElementById("cookie-banner");
+        const acceptBtn = document.getElementById("accept-cookies");
+        const form = document.getElementById("signinForm");
+        const cookieWarning = document.getElementById("cookie-warning");
+
+        function blockForm() {
+          form.classList.add("form-blocked");
+          cookieWarning.classList.remove("hidden");
+        }
+
+        function unblockForm() {
+          form.classList.remove("form-blocked");
+          cookieWarning.classList.add("hidden");
+        }
+
+        const cookiesAccepted = localStorage.getItem("cookiesAccepted");
+
+        if (!cookiesAccepted || cookiesAccepted !== "true") {
+          cookieBanner.classList.remove("hidden");
+          cookieBanner.style.display = "flex";
+          blockForm();
+        } else {
+          cookieBanner.classList.add("hidden");
+          unblockForm();
+        }
+
+        acceptBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          try {
+            localStorage.setItem("cookiesAccepted", "true");
+            cookieBanner.classList.add("hidden");
+            cookieBanner.style.display = "none";
+            unblockForm();
+          } catch (error) {
+            console.error("Error setting localStorage:", error);
+            unblockForm();
+          }
+        });
+
+        form.addEventListener("submit", function (e) {
+          const cookiesAccepted = localStorage.getItem("cookiesAccepted");
+          if (!cookiesAccepted || cookiesAccepted !== "true") {
+            e.preventDefault();
+            e.stopPropagation();
+            cookieWarning.textContent = "⚠️ Please accept cookies first!";
+            cookieWarning.style.animation = "none";
+            setTimeout(() => {
+              cookieWarning.style.animation = "pulse 1s ease-in-out";
+            }, 10);
+            return false;
+          }
+        });
+      });
+    </script>
+
+    <style>
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,1274 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PerfectMatch | survey</title>
+    <link rel="stylesheet" href="{% static 'assets/css/survey.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_diamond" />
+  </head>
+
+  <body>
+    {%include 'navbar.html'%}
+
+    <div class="survey-container">
+      <form id="surveyForm" method="POST" action="{% url 'survey' %}">
+        {% csrf_token %}
+        <div class="progress-indicator" id="progressIndicator"></div>
+
+        <!-- Page 1 -->
+        <div class="form-page active">
+          <h3>1. Basic Info</h3>
+          <label>Gender:</label>
+          <div class="custom-checkbox-group">
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="gender-male"
+                name="gender"
+                value="Male" /><label for="gender-male">Male</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="gender-female"
+                name="gender"
+                value="Female" /><label for="gender-female">Female</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="gender-nonbinary"
+                name="gender"
+                value="Non-binary" /><label for="gender-nonbinary"
+                >Non-binary</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="gender-none"
+                name="gender"
+                value="Prefer not to say" /><label for="gender-none"
+                >Prefer not to say</label
+              >
+            </div>
+          </div>
+
+          <label>Looking for:</label>
+          <div class="custom-checkbox-group">
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="looking-male"
+                name="looking_for"
+                value="Male" /><label for="looking-male">Male</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="looking-female"
+                name="looking_for"
+                value="Female" /><label for="looking-female">Female</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="looking-nonbinary"
+                name="looking_for"
+                value="Non-binary" /><label for="looking-nonbinary"
+                >Non-binary</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="looking-all"
+                name="looking_for"
+                value="Open to all" /><label for="looking-all"
+                >Open to all</label
+              >
+            </div>
+          </div>
+
+          <label>Age Range Preference:</label>
+          <div class="custom-checkbox-group">
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="age-18-24"
+                name="age_range"
+                value="18–24" /><label for="age-18-24">18–24</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="age-25-34"
+                name="age_range"
+                value="25–34" /><label for="age-25-34">25–34</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="age-35-44"
+                name="age_range"
+                value="35–44" /><label for="age-35-44">35–44</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="age-45+"
+                name="age_range"
+                value="45+" /><label for="age-45+">45+</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="form-page">
+          <h3>2. Relationship Goals</h3>
+          <label>What are you looking for?</label>
+          <div class="custom-checkbox-group">
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="goal-long"
+                name="goal"
+                value="Long-term relationship" /><label for="goal-long"
+                >Long-term relationship</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="goal-short"
+                name="goal"
+                value="Short-term dating" /><label for="goal-short"
+                >Short-term dating</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="goal-friendship"
+                name="goal"
+                value="Friendship" /><label for="goal-friendship"
+                >Friendship</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="goal-marriage"
+                name="goal"
+                value="Marriage" /><label for="goal-marriage">Marriage</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="goal-browsing"
+                name="goal"
+                value="Just browsing" /><label for="goal-browsing"
+                >Just browsing</label
+              >
+            </div>
+          </div>
+
+          <label>How soon do you want to meet someone in person?</label>
+          <div class="custom-checkbox-group">
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="meet-asap"
+                name="meet"
+                value="ASAP" /><label for="meet-asap">ASAP</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="meet-few"
+                name="meet"
+                value="Few weeks" /><label for="meet-few">In a few weeks</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="meet-unsure"
+                name="meet"
+                value="Not sure" /><label for="meet-unsure">Not sure yet</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="meet-online"
+                name="meet"
+                value="Online only" /><label for="meet-online"
+                >Online only</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Page 3 -->
+        <div class="form-page">
+          <h3>3. Lifestyle & Interests</h3>
+          <label>Do you smoke?</label>
+          <div class="custom-checkbox-group">
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="smoke-yes"
+                name="smoke"
+                value="Yes" /><label for="smoke-yes">Yes</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="smoke-no"
+                name="smoke"
+                value="No" /><label for="smoke-no">No</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="smoke-sometimes"
+                name="smoke"
+                value="Occasionally" /><label for="smoke-sometimes"
+                >Occasionally</label
+              >
+            </div>
+          </div>
+
+          <label>Do you drink alcohol?</label>
+          <div class="custom-checkbox-group">
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="drink-yes"
+                name="drink"
+                value="Yes" /><label for="drink-yes">Yes</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="drink-no"
+                name="drink"
+                value="No" /><label for="drink-no">No</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="drink-sometimes"
+                name="drink"
+                value="Occasionally" /><label for="drink-sometimes"
+                >Occasionally</label
+              >
+            </div>
+          </div>
+
+          <label>Do you want children someday?</label>
+          <div class="custom-checkbox-group">
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="kids-yes"
+                name="children"
+                value="Yes" /><label for="kids-yes">Yes</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="kids-no"
+                name="children"
+                value="No" /><label for="kids-no">No</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="kids-maybe"
+                name="children"
+                value="Maybe" /><label for="kids-maybe">Maybe</label>
+            </div>
+          </div>
+
+          <label>What are your hobbies or interests?</label>
+          <div
+            class="custom-checkbox-group-scrollable hobbies-section-scrollable">
+            <div class="custom-checkbox-group">
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-travel"
+                  name="hobbies"
+                  value="Travel" />
+                <label for="hobby-travel">Travel✈️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-fitness"
+                  name="hobbies"
+                  value="Fitness" />
+                <label for="hobby-fitness">Fitness💪</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-gaming"
+                  name="hobbies"
+                  value="Gaming" />
+                <label for="hobby-gaming">Gaming🎮</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-music"
+                  name="hobbies"
+                  value="Music" />
+                <label for="hobby-music">Music🎵</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-reading"
+                  name="hobbies"
+                  value="Reading" />
+                <label for="hobby-reading">Reading📚</label>
+              </div>
+              <!-- Gambling Checkbox -->
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-gambling"
+                  name="hobbies"
+                  value="Reading" />
+                <label for="hobby-gambling">Gambling🎲</label>
+              </div> 
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-cooking"
+                  name="hobbies"
+                  value="Cooking" />
+                <label for="hobby-cooking">Cooking🍳</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-tv"
+                  name="hobbies"
+                  value="Movies/TV" />
+                <label for="hobby-tv">Movies/TV📺</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-dancing"
+                  name="hobbies"
+                  value="Dancing" />
+                <label for="hobby-dancing">Dancing💃</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-photography"
+                  name="hobbies"
+                  value="Photography" />
+                <label for="hobby-photography">Photography📸</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-drawing"
+                  name="hobbies"
+                  value="Drawing" />
+                <label for="hobby-drawing">Drawing✏️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-painting"
+                  name="hobbies"
+                  value="Painting" />
+                <label for="hobby-painting">Painting🎨</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-writing"
+                  name="hobbies"
+                  value="Writing" />
+                <label for="hobby-writing">Writing📝</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-volunteering"
+                  name="hobbies"
+                  value="Volunteering" />
+                <label for="hobby-volunteering">Volunteering🤝</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-animals"
+                  name="hobbies"
+                  value="Animal Care" />
+                <label for="hobby-animals">Animal Care🐾</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-sports"
+                  name="hobbies"
+                  value="Sports" />
+                <label for="hobby-sports">Sports🏅</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-fishing"
+                  name="hobbies"
+                  value="Fishing" />
+                <label for="hobby-fishing">Fishing🎣</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-gardening"
+                  name="hobbies"
+                  value="Gardening" />
+                <label for="hobby-gardening">Gardening🌱</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-baking"
+                  name="hobbies"
+                  value="Baking" />
+                <label for="hobby-baking">Baking🍰</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-blogging"
+                  name="hobbies"
+                  value="Blogging" />
+                <label for="hobby-blogging">Blogging✍️</label>
+              </div>
+
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-esports"
+                  name="hobbies"
+                  value="Esports" />
+                <label for="hobby-esports">Esports🎮</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-vr_ar"
+                  name="hobbies"
+                  value="VR/AR Experiences" />
+                <label for="hobby-vr_ar">VR/AR Experiences🕶️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-vlogging"
+                  name="hobbies"
+                  value="Vlogging/YouTube" />
+                <label for="hobby-vlogging">Vlogging/YouTube📹</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-podcasting"
+                  name="hobbies"
+                  value="Podcasting" />
+                <label for="hobby-podcasting">Podcasting🎙️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-streaming"
+                  name="hobbies"
+                  value="Streaming Content" />
+                <label for="hobby-streaming">Streaming Content📺</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-digital_art"
+                  name="hobbies"
+                  value="Digital Art" />
+                <label for="hobby-digital_art">Digital Art🎨</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-3d_modeling"
+                  name="hobbies"
+                  value="3D Modeling/Printing" />
+                <label for="hobby-3d_modeling">3D Modeling/Printing🖨️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-video_editing"
+                  name="hobbies"
+                  value="Video Editing" />
+                <label for="hobby-video_editing">Video Editing🎬</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-music_prod"
+                  name="hobbies"
+                  value="Music Production" />
+                <label for="hobby-music_prod">Music Production🎵</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-coding"
+                  name="hobbies"
+                  value="Coding/Programming" />
+                <label for="hobby-coding">Coding/Programming💻</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-app_dev"
+                  name="hobbies"
+                  value="App Development" />
+                <label for="hobby-app_dev">App Development📱</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-game_dev"
+                  name="hobbies"
+                  value="Game Development" />
+                <label for="hobby-game_dev">Game Development🎮</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-home_auto"
+                  name="hobbies"
+                  value="Home Automation" />
+                <label for="hobby-home_auto">Home Automation🏡</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-online_learning"
+                  name="hobbies"
+                  value="Online Learning" />
+                <label for="hobby-online_learning">Online Learning💻</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-lang_learning"
+                  name="hobbies"
+                  value="Language Learning" />
+                <label for="hobby-lang_learning">Language Learning🗣️</label>
+              </div>
+
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-sculpting"
+                  name="hobbies"
+                  value="Sculpting" />
+                <label for="hobby-sculpting">Sculpting🗿</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-pottery"
+                  name="hobbies"
+                  value="Pottery/Ceramics" />
+                <label for="hobby-pottery">Pottery/Ceramics🧱</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-calligraphy"
+                  name="hobbies"
+                  value="Calligraphy" />
+                <label for="hobby-calligraphy">Calligraphy✍️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-knitting"
+                  name="hobbies"
+                  value="Knitting/Crocheting" />
+                <label for="hobby-knitting">Knitting/Crocheting🧶</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-embroidery"
+                  name="hobbies"
+                  value="Embroidery" />
+                <label for="hobby-embroidery">Embroidery🧵</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-jewelry"
+                  name="hobbies"
+                  value="Jewelry Making" />
+                <label for="hobby-jewelry">Jewelry Making💍</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-candle"
+                  name="hobbies"
+                  value="Candle Making" />
+                <label for="hobby-candle">Candle Making🕯️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-woodworking"
+                  name="hobbies"
+                  value="Woodworking" />
+                <label for="hobby-woodworking">Woodworking🪵</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-resin_art"
+                  name="hobbies"
+                  value="Resin Art" />
+                <label for="hobby-resin_art">Resin Art🖌️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-macrame"
+                  name="hobbies"
+                  value="Macrame" />
+                <label for="hobby-macrame">Macrame🧵</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-model_building"
+                  name="hobbies"
+                  value="Model Building" />
+                <label for="hobby-model_building">Model Building🏗️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-upcycling"
+                  name="hobbies"
+                  value="Upcycling/Customizing" />
+                <label for="hobby-upcycling">Upcycling/Customizing♻️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-singing"
+                  name="hobbies"
+                  value="Singing" />
+                <label for="hobby-singing">Singing🎤</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-instruments"
+                  name="hobbies"
+                  value="Playing Instruments" />
+                <label for="hobby-instruments">Playing Instruments🎸</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-acting"
+                  name="hobbies"
+                  value="Acting/Improv" />
+                <label for="hobby-acting">Acting/Improv🎭</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-creative_writing"
+                  name="hobbies"
+                  value="Creative Writing" />
+                <label for="hobby-creative_writing">Creative Writing📝</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-journaling"
+                  name="hobbies"
+                  value="Journaling" />
+                <label for="hobby-journaling">Journaling📓</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-mixology"
+                  name="hobbies"
+                  value="Mixology" />
+                <label for="hobby-mixology">Mixology🍹</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-coffee_brewing"
+                  name="hobbies"
+                  value="Coffee Brewing" />
+                <label for="hobby-coffee_brewing">Coffee Brewing☕</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-fermentation"
+                  name="hobbies"
+                  value="Fermentation" />
+                <label for="hobby-fermentation">Fermentation🍷</label>
+              </div>
+
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-yoga"
+                  name="hobbies"
+                  value="Yoga/Pilates" />
+                <label for="hobby-yoga">Yoga/Pilates🧘‍♀️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-running"
+                  name="hobbies"
+                  value="Running/Jogging" />
+                <label for="hobby-running">Running/Jogging🏃‍♂️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-hiking"
+                  name="hobbies"
+                  value="Hiking/Backpacking" />
+                <label for="hobby-hiking">Hiking/Backpacking 🥾</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-cycling"
+                  name="hobbies"
+                  value="Cycling" />
+                <label for="hobby-cycling">Cycling🚴‍♂ ️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-strength_train"
+                  name="hobbies"
+                  value="Strength Training" />
+                <label for="hobby-strength_train">Strength Training🏋️‍♂️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-martial_arts"
+                  name="hobbies"
+                  value="Martial Arts" />
+                <label for="hobby-martial_arts">Martial Arts🥋</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-rock_climbing"
+                  name="hobbies"
+                  value="Rock Climbing" />
+                <label for="hobby-rock_climbing">Rock Climbing🧗‍♂️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-swimming"
+                  name="hobbies"
+                  value="Swimming" />
+                <label for="hobby-swimming">Swimming🏊‍♂️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-team_sports"
+                  name="hobbies"
+                  value="Team Sports" />
+                <label for="hobby-team_sports">Team Sports🏅</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-bird_watching"
+                  name="hobbies"
+                  value="Bird Watching" />
+                <label for="hobby-bird_watching">Bird Watching🐦</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-stargazing"
+                  name="hobbies"
+                  value="Stargazing" />
+                <label for="hobby-stargazing">Stargazing🌌</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-camping"
+                  name="hobbies"
+                  value="Camping/Glamping" />
+                <label for="hobby-camping">Camping/Glamping🏕️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-foraging"
+                  name="hobbies"
+                  value="Foraging" />
+                <label for="hobby-foraging">Foraging🍂</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-geocaching"
+                  name="hobbies"
+                  value="Geocaching" />
+                <label for="hobby-geocaching">Geocaching🗺️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-meditation"
+                  name="hobbies"
+                  value="Meditation" />
+                <label for="hobby-meditation">Meditation🧘‍♂️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-forest_bathing"
+                  name="hobbies"
+                  value="Forest Bathing" />
+                <label for="hobby-forest_bathing">Forest Bathing🌲</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-puzzling"
+                  name="hobbies"
+                  value="Puzzling" />
+                <label for="hobby-puzzling">Puzzling🧩</label>
+              </div>
+
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-vinyl"
+                  name="hobbies"
+                  value="Vinyl Collecting" />
+                <label for="hobby-vinyl">Vinyl Collecting🎵</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-book_collecting"
+                  name="hobbies"
+                  value="Book Collecting" />
+                <label for="hobby-book_collecting">Book Collecting📚</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-figures"
+                  name="hobbies"
+                  value="Action Figures/Collectibles" />
+                <label for="hobby-figures">Action Figures/Collectibles🧸</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-coins_stamps"
+                  name="hobbies"
+                  value="Coins/Stamps" />
+                <label for="hobby-coins_stamps">Coins/Stamps💰</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-trading_cards"
+                  name="hobbies"
+                  value="Trading Cards" />
+                <label for="hobby-trading_cards">Trading Cards🃏</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-sneakers"
+                  name="hobbies"
+                  value="Sneaker Collecting" />
+                <label for="hobby-sneakers">Sneaker Collecting👟</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-plants"
+                  name="hobbies"
+                  value="Plant Collecting" />
+                <label for="hobby-plants">Plant Collecting🪴</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-vintage_fashion"
+                  name="hobbies"
+                  value="Vintage Fashion" />
+                <label for="hobby-vintage_fashion">Vintage Fashion👗</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-playlist_curation"
+                  name="hobbies"
+                  value="Playlist Curation" />
+                <label for="hobby-playlist_curation">Playlist Curation🎶</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-film_deep_dives"
+                  name="hobbies"
+                  value="Film/TV Deep Dives" />
+                <label for="hobby-film_deep_dives">Film/TV Deep Dives🎬</label>
+              </div>
+
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-board_games"
+                  name="hobbies"
+                  value="Board Games/TTRPGs" />
+                <label for="hobby-board_games">Board Games/TTRPGs🎲</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-book_clubs"
+                  name="hobbies"
+                  value="Book Clubs" />
+                <label for="hobby-book_clubs">Book Clubs📖</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-urbex"
+                  name="hobbies"
+                  value="Urban Exploration" />
+                <label for="hobby-urbex">Urban Exploration🏙 ️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-genealogy"
+                  name="hobbies"
+                  value="Genealogy" />
+                <label for="hobby-genealogy">Genealogy🧬</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-community_advocacy"
+                  name="hobbies"
+                  value="Community Advocacy" />
+                <label for="hobby-community_advocacy"
+                  >Community Advocacy 🤝</label
+                >
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-local_events"
+                  name="hobbies"
+                  value="Attending Local Events" />
+                <label for="hobby-local_events">Attending Local Events🎉</label>
+              </div>
+
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-drone"
+                  name="hobbies"
+                  value="Drone Piloting" />
+                <label for="hobby-drone">Drone Piloting🚁</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-lock_picking"
+                  name="hobbies"
+                  value="Lock Picking" />
+                <label for="hobby-lock_picking">Lock Picking🔐</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-restoration"
+                  name="hobbies"
+                  value="Restoration" />
+                <label for="hobby-restoration">Restoration🛠 ️</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-homebrewing"
+                  name="hobbies"
+                  value="Homebrewing" />
+                <label for="hobby-homebrewing">Homebrewing🍺</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-mycology"
+                  name="hobbies"
+                  value="Mycology" />
+                <label for="hobby-mycology">Mycology🍄</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-aquascaping"
+                  name="hobbies"
+                  value="Aquascaping" />
+                <label for="hobby-aquascaping">Aquascaping🌊</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-urban_farming"
+                  name="hobbies"
+                  value="Urban Farming" />
+                <label for="hobby-urban_farming">Urban Farming🌱</label>
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-skateboarding"
+                  name="hobbies"
+                  value="Skateboarding/Longboarding" />
+                <label for="hobby-skateboarding"
+                  >Skateboarding/Longboarding🛹</label
+                >
+              </div>
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="hobby-parkour"
+                  name="hobbies"
+                  value="Parkour/Freerunning" />
+                <label for="hobby-parkour">Parkour/Freerunning🧗‍♂️</label>
+              </div>
+            </div>
+          </div>
+          <label>Other:</label>
+          <input type="text" name="other_hobbies" />
+        </div>
+
+        <!-- Page 4 -->
+        <div class="form-page">
+          <h3>4. Personality</h3>
+          <label>How would your friends describe you? (Select 3)</label>
+          <div class="custom-checkbox-group">
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="trait-funny"
+                name="traits"
+                value="Funny" /><label for="trait-funny">Funny</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="trait-ambitious"
+                name="traits"
+                value="Ambitious" /><label for="trait-ambitious"
+                >Ambitious</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="trait-laidback"
+                name="traits"
+                value="Laid-back" /><label for="trait-laidback"
+                >Laid-back</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="trait-caring"
+                name="traits"
+                value="Caring" /><label for="trait-caring">Caring</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="trait-outgoing"
+                name="traits"
+                value="Outgoing" /><label for="trait-outgoing">Outgoing</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="trait-shy"
+                name="traits"
+                value="Shy" /><label for="trait-shy">Shy</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="trait-loyal"
+                name="traits"
+                value="Loyal" /><label for="trait-loyal">Loyal</label>
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="trait-creative"
+                name="traits"
+                value="Creative" /><label for="trait-creative">Creative</label>
+            </div>
+          </div>
+
+          <label>Your love language?</label>
+          <div class="custom-checkbox-group">
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="love-words"
+                name="love_language"
+                value="Words of Affirmation" /><label for="love-words"
+                >Words of Affirmation</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="love-service"
+                name="love_language"
+                value="Acts of Service" /><label for="love-service"
+                >Acts of Service</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="love-gifts"
+                name="love_language"
+                value="Receiving Gifts" /><label for="love-gifts"
+                >Receiving Gifts</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="love-time"
+                name="love_language"
+                value="Quality Time" /><label for="love-time"
+                >Quality Time</label
+              >
+            </div>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="love-touch"
+                name="love_language"
+                value="Physical Touch" /><label for="love-touch"
+                >Physical Touch</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="navigation">
+          <button type="button" id="prevBtn">Previous</button>
+          <button type="button" id="nextBtn">Next</button>
+        </div>
+      </form>
+    </div>
+  </body>
+  <script>
+    const pages = document.querySelectorAll(".form-page");
+    const indicator = document.getElementById("progressIndicator");
+    const nextBtn = document.getElementById("nextBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    let currentPage = 0;
+
+    function updateIndicator() {
+      indicator.innerHTML = "";
+      pages.forEach((_, index) => {
+        const dot = document.createElement("span");
+        if (index === currentPage) dot.classList.add("active");
+        indicator.appendChild(dot);
+      });
+    }
+
+    function showPage(index) {
+      pages.forEach((page) => page.classList.remove("active"));
+      pages[index].classList.add("active");
+      updateIndicator();
+      prevBtn.disabled = currentPage === 0;
+      nextBtn.textContent =
+        currentPage === pages.length - 1 ? "Submit" : "Next";
+    }
+
+    function validatePage(index) {
+      const checked = pages[index].querySelectorAll(
+        "input[type='checkbox']:checked, input[type='text']"
+      );
+      return checked.length > 0;
+    }
+
+    nextBtn.addEventListener("click", () => {
+      if (!validatePage(currentPage)) {
+        alert("Please answer at least one field before proceeding.");
+        return;
+      }
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        showPage(currentPage);
+      } else {
+        document.getElementById("surveyForm").submit(); // 🔥 Real submit
+      }
+    });
+
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 0) {
+        currentPage--;
+        showPage(currentPage);
+      }
+    });
+
+    showPage(currentPage);
+    updateIndicator();
+  </script>
+</html>

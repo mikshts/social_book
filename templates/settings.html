@@ -1,0 +1,368 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PerfectMatch | settings</title>
+    <link rel="stylesheet" href="{% static 'assets/css/settings.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://unicons.iconscout.com/release/v3.0.0/css/line.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_diamond" />
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+
+    <main class="container-main">
+      <section>
+          <h1>Settings</h1>
+          <p>Manage your account settings and preferences.</p>
+
+          <div class="settings-container">
+              <h2>Profile Settings</h2>
+
+              {% if messages %}
+                  <div class="messages">
+                      {% for message in messages %}
+                          <div class="alert alert-{{ message.tags }}">
+                              <span class="alert-icon">
+                                  {% if message.tags == 'success' %}✓{% elif message.tags == 'error' %}⚠{% else %}ℹ{% endif %}
+                              </span>
+                              {{ message }}
+                              <button type="button" class="close-alert" onclick="this.parentElement.remove()">×</button>
+                          </div>
+                      {% endfor %}
+                  </div>
+              {% endif %}
+
+              <form method="POST" enctype="multipart/form-data" id="profile-form">
+                  {% csrf_token %}
+
+                <div class="form-group">
+                  <label for="id_profileimg">Profile Image:</label>
+                  <div class="image-upload-container">
+                    {% if current_values.profile_img_url %}
+                      <div class="current-image">
+                        <img
+                          src="{{ current_values.profile_img_url }}"
+                          alt="Current Profile Image"
+                          id="current-profile-img"
+                          data-original-src="{{ current_values.profile_img_url }}"
+                          class="preview-img"
+                        >
+                        <div class="image-overlay">
+                          <span>Click to change</span>
+                        </div>
+                      </div>
+                    {% else %}
+                      <div class="no-image" id="no-image-placeholder">
+                        <div class="placeholder-icon">📷</div>
+                        <span>Upload Profile Image</span>
+                      </div>
+                    {% endif %}
+                    <input type="file" name="profile_img" id="id_profileimg" accept="image/*" style="display: none;">
+                  </div>
+                  <small class="help-text">Maximum file size: 5MB. Supported formats: JPEG, PNG, GIF</small>
+                  {% if errors.profile_img %}
+                    <div class="error-message">{{ errors.profile_img }}</div>
+                  {% endif %}
+                </div>
+
+
+                  <div class="form-group">
+                      <label for="id_bio">Bio:</label>
+                      <textarea name="bio" id="id_bio" maxlength="1000" rows="4" placeholder="Tell us about yourself...">{{ current_values.bio|default:'' }}</textarea>
+                      <div class="char-counter">
+                          <span id="bio-count">{{ current_values.bio|length|default:0 }}</span>/1000 characters
+                      </div>
+                      {% if errors.bio %}<div class="error-message">{{ errors.bio }}</div>{% endif %}
+                  </div>
+
+                   <div class="form-group">
+                      <label for="id_location">Location:</label>
+                      <input type="text" name="location" id="id_location" value="{{ current_values.location|default:'' }}" maxlength="100" placeholder="Enter your location">
+                      <small class="help-text">Maximum 100 characters</small>
+                      {% if errors.location %}<div class="error-message">{{ errors.location }}</div>{% endif %}
+                  </div>
+
+                  <div class="form-group">
+                      <label for="id_age">Age:</label>
+                      <input type="number" name="age" id="id_age" value="{{ current_values.age|default:'' }}" min="13" max="120" placeholder="Enter your age">
+                      <small class="help-text">Must be between 13 and 120</small>
+                      {% if errors.age %}<div class="error-message">{{ errors.age }}</div>{% endif %}
+                  </div>
+
+                  <div class="form-group">
+                      <label for="id_relation">Relationship Status:</label>
+                      <select name="relation" id="id_relation">
+                          <option value="">Select relationship status</option>
+                          {% for value, display in relationship_choices %}
+                              <option value="{{ value }}" {% if current_values.relation == value %}selected{% endif %}>
+                                  {{ display }}
+                              </option>
+                          {% endfor %}
+                      </select>
+                      {% if errors.relation %}<div class="error-message">{{ errors.relation }}</div>{% endif %}
+                  </div>
+
+                  <div class="form-group">
+                      <label for="id_gender">Gender:</label>
+                      <select name="gender" id="id_gender">
+                          <option value="">Select gender</option>
+                          {% for value, display in gender_choices %}
+                              <option value="{{ value }}" {% if current_values.gender == value %}selected{% endif %}>
+                                  {{ display }}
+                              </option>
+                          {% endfor %}
+                      </select>
+                      {% if errors.gender %}<div class="error-message">{{ errors.gender }}</div>{% endif %}
+                  </div>
+
+                  <div class="form-group">
+                      <label for="id_height">Height:</label>
+                      <div class="input-with-unit">
+                          <input type="number" name="height" id="id_height" value="{{ current_values.height|default:'' }}" step="0.1" min="1" max="10" placeholder="5.8">
+                          <span class="unit">feet</span>
+                      </div>
+                      <small class="help-text">Enter height in feet (e.g., 5.8)</small>
+                      {% if errors.height %}<div class="error-message">{{ errors.height }}</div>{% endif %}
+                  </div>
+
+                  <div class="form-group">
+                      <label for="id_weight">Weight:</label>
+                      <div class="input-with-unit">
+                          <input type="number" name="weight" id="id_weight" value="{{ current_values.weight|default:'' }}" step="0.1" min="30" max="500" placeholder="150">
+                          <span class="unit">lbs</span>
+                      </div>
+                      <small class="help-text">Enter weight in pounds (30-500)</small>
+                      {% if errors.weight %}<div class="error-message">{{ errors.weight }}</div>{% endif %}
+                  </div>
+
+                  <div class="form-group">
+                      <label for="id_birthday">Birthday:</label>
+                      <input type="date" name="birthday" id="id_birthday" value="{{ current_values.birthday|default:'' }}">
+                      <small class="help-text">Must be at least 13 years old</small>
+                      {% if errors.birthday %}<div class="error-message">{{ errors.birthday }}</div>{% endif %}
+                  </div>
+
+                  
+
+                 
+
+
+
+                  <div class="form-actions">
+                      <button type="submit" class="btn-primary" id="save-btn">
+                          <span class="btn-text">Save Settings</span>
+                          <span class="loading-spinner" style="display: none;">⟳</span>
+                      </button>
+                      <button type="button" class="btn-secondary" onclick="resetForm()">Reset</button>
+                  </div>
+              </form>
+          </div>
+      </section>
+
+      
+        
+      <section>
+        <h2>Privacy Settings</h2>
+        <label for="profile-visibility">Who can see your profile?</label>
+        <select id="profile-visibility">
+          <option>Everyone</option>
+          <option>Only Matches</option>
+          <option>Private</option>
+        </select>
+
+        <label for="blocked-users">Blocked Users</label>
+        <input
+          type="text"
+          id="blocked-users"
+          placeholder="Search users to block" />
+
+        <div class="toggle">
+          <label for="two-factor">Two-Factor Authentication</label>
+          <input type="checkbox" id="two-factor" />
+        </div>
+      </section>
+
+      <section>
+        <h2>Notifications</h2>
+        <div class="toggle">
+          <label for="email-notifications">Email Notifications</label>
+          <input type="checkbox" id="email-notifications" />
+        </div>
+
+        <div class="toggle">
+          <label for="push-notifications">Push Notifications</label>
+          <input type="checkbox" id="push-notifications" />
+        </div>
+
+        <label for="sound-vibration">Sound / Vibration</label>
+        <select id="sound-vibration">
+          <option>Sound & Vibration</option>
+          <option>Sound Only</option>
+          <option>Vibration Only</option>
+          <option>Silent</option>
+        </select>
+      </section>
+
+      <section>
+        <h2>Account Security</h2>
+        <div class="toggle">
+          <label for="account-lock">Enable Account Lock</label>
+          <input type="checkbox" id="account-lock" />
+        </div>
+
+        <label for="security-question">Security Question</label>
+        <select id="security-question">
+          <option>What is your pet's name?</option>
+          <option>What is your mother's maiden name?</option>
+          <option>What is your favorite color?</option>
+        </select>
+        <label for="security-answer">Answer</label>
+        <input type="text" id="security-answer" placeholder="Answer" />
+      </section>
+
+      <!-- Account Actions -->
+      <div id="deactivateAccountModal" class="my-custom-modal">
+        <div class="my-custom-modal-content">
+          <span
+            class="my-custom-close-button"
+            onclick="closeMyCustomModal('deactivateAccountModal')"
+            >&times;</span
+          >
+          <h2>Confirm Account Deactivation</h2>
+          <p>
+            Are you sure you want to deactivate your account for
+            <strong id="deactivationDaysDisplay"></strong>? You will be logged
+            out immediately.
+          </p>
+          <form
+            action="{% url 'deactivate_account' %}"
+            method="POST"
+            id="deactivateForm">
+            {% csrf_token %}
+            <input
+              type="hidden"
+              name="deactivation_period"
+              id="modalDeactivationPeriod"
+              value="" />
+            <div class="my-custom-modal-buttons">
+              <button type="submit" class="my-custom-btn my-custom-btn-confirm">
+                Deactivate
+              </button>
+              <button
+                type="button"
+                class="my-custom-btn my-custom-btn-cancel"
+                onclick="closeMyCustomModal('deactivateAccountModal')">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+        </div>
+          <div id="deleteAccountModal" class="my-custom-modal">
+            <div class="my-custom-modal-content">
+              <span
+                class="my-custom-close-button"
+                onclick="closeMyCustomModal('deleteAccountModal')"
+                >&times;</span
+              >
+
+              <h2>Confirm Account Deletion</h2>
+
+              <p>
+                <strong style="color: var(--color-danger)">WARNING:</strong> Are you
+                absolutely sure you want to DELETE your account? This action is
+                irreversible. All your data (profile, posts, comments, etc.) will be permanently lost.
+              </p>
+
+              <form
+                action="{% url 'delete_account' %}"
+                method="POST"
+                id="deleteForm">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                  <label for="deletion_reason" class="block text-gray-700 text-sm font-medium mb-2">
+                      Reason for deletion (optional):
+                  </label>
+                  <textarea
+                      id="deletion_reason"
+                      name="reason"
+                      rows="4"
+                      class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200 ease-in-out"
+                      placeholder="e.g., 'I'm no longer using this service', 'Privacy concerns', etc."
+                  ></textarea>
+                </div>
+
+                <div class="my-custom-modal-buttons">
+                  <button
+                    type="submit"
+                    class="my-custom-btn my-custom-btn-confirm-danger">
+                    Delete Permanently
+                  </button>
+                  <button
+                    type="button"
+                    class="my-custom-btn my-custom-btn-cancel"
+                    onclick="closeMyCustomModal('deleteAccountModal')">
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+      
+
+      <section>
+        <h2>Account Actions</h2>
+
+        <form id="deactivateMainForm" style="margin-bottom: 1rem">
+          {% csrf_token %}
+          <div>
+            <label for="deactivation_period">Deactivate Account for:</label>
+            <select name="deactivation_period" id="deactivation_period">
+              <option value="15">15 Days</option>
+              <option value="30">30 Days</option>
+            </select>
+          </div>
+          <button
+            type="button"
+            class="btn"
+            style="background: var(--color-grey); margin-top: 1rem"
+            onclick="openDeactivateAccountModal()">
+            Deactivate Account
+          </button>
+        </form>
+
+        <form id="deleteMainForm" style="margin-bottom: 1rem">
+          {% csrf_token %}
+          <button
+            type="button"
+            class="btn"
+            style="background: var(--color-danger)"
+            onclick="openMyCustomModal('deleteAccountModal')">
+            Delete Account
+          </button>
+        </form>
+
+        <form action="{% url 'logout_view' %}" method="POST">
+          {% csrf_token %}
+          <button
+            class="btn"
+            style="background: var(--color-success); margin-top: 1rem"
+            onclick="return confirm('Are you sure you want to log out?')">
+            Log Out
+          </button>
+        </form>
+      </section>
+    </main>
+  </body>
+  <script src="{% static 'assets/js/settings.js'%}"></script>
+</html>

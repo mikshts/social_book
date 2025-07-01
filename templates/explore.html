@@ -1,0 +1,851 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PerfectMatch | explore</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{%static 'assets/css/explore.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/style.css'%}">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_diamond" />
+  </head>
+
+  <body>
+      {% include 'navbar.html' %}
+
+    <div class="explore-container">
+      <h2>Explore Profiles</h2>
+
+      <!-- Global Ranking Section -->
+      <div class="profile-grid">
+        <div class="profile-slider-container">
+          <div class="profile-slider active" data-ranking="most-liked">
+            
+            <!-- 1ST Most LIKED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/yan.png'%}" alt="Profile" />
+                <div class="ranking">🥇</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 2ND Most LIKED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/maico.jpg'%}" alt="Profile" />
+                <div class="ranking">🥈</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 3RD Most LIKED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/angel.png'%}" alt="Profile" />
+                <div class="ranking">🥉</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 4TH Most LIKED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🏅</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <!-- Add more cards here -->
+          </div>
+                  <!-- Most Visited Profiles -->
+          <div class="profile-slider" data-ranking="most-visited">
+            <!-- Most Visited Profiles -->
+            <!-- 1ST Most VISITED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/yan.png'%}" alt="Profile" />
+                <div class="ranking">🥇</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 2ND Most VISITED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/maico.jpg'%}" alt="Profile" />
+                <div class="ranking">🥈</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 3RD Most VISITED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🥉</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 4TH Most  VISITED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/yan.png'%}" alt="Profile" />
+                <div class="ranking">🏅</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <!-- Add more cards here -->
+          </div>
+
+                      <!-- Most Active Profiles -->
+          <div class="profile-slider" data-ranking="most-active">
+            <!-- 1ST Most ACTIVE Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/yan.png'%}" alt="Profile" />
+                <div class="ranking">🥇</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 2ND Most ACTIVE Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/maico.jpg'%}" alt="Profile" />
+                <div class="ranking">🥈</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 3RD Most ACTIVE Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🥉</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 4TH Most ACTIVE Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🏅</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <!-- Add more cards here -->
+          </div>
+
+          <div class="slider-controls">
+            <button class="slider-btn prev-btn">❮</button>
+            <button class="slider-btn next-btn">❯</button>
+          </div>
+        </div>
+
+        <div class="global-ranking">
+          <h2>Global Rankings</h2>
+          <div class="ranking-tabs">
+            <button class="tab active" onclick="showRanking('most-liked')">
+              Most Liked
+            </button>
+            <button class="tab" onclick="showRanking('most-visited')">
+              Most Visited
+            </button>
+            <button class="tab" onclick="showRanking('most-active')">
+              Most Active
+            </button>
+          </div>
+          <div class="sulod">
+            <!--MOST-LIKED TABLE -->
+            <table id="most-liked" class="ranking-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>User</th>
+                  <th>Likes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>chokwak</td>
+                  <td>250</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>EngagerPro</td>
+                  <td>220</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+              </tbody>
+            </table>
+            <!--MOST-VISITED TABLE-->
+            <table
+              id="most-visited"
+              class="ranking-table"
+              style="display: none">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>User</th>
+                  <th>Visits</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>aldwin</td>
+                  <td>250</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>EngagerPro</td>
+                  <td>220</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+              </tbody>
+            </table>
+            <!--MOST-ACTIVE TABLE-->
+            <table id="most-active" class="ranking-table" style="display: none">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>User</th>
+                  <th>Activity Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>steve loyd</td>
+                  <td>250</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>EngagerPro</td>
+                  <td>220</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>SocialButterfly</td>
+                  <td>200</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Local Ranking Section -->
+      <div class="profile-grid">
+        <!--profile slider-->
+        <div class="profile-slider-container">
+          <!-- Local Most Liked Profiles -->
+          <div class="profile-slider active" data-ranking="local-most-liked">
+            <!-- 1ST Most Liked Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/yan.png'%}" alt="Profile" />
+                <div class="ranking">🥇</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 2ND Most Liked Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🥈</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 3RD Most Liked Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🥉</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 4TH Most Liked Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🏅</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <!-- Add more cards here -->
+          </div>
+
+
+            <!-- Local Most Visited Profiles -->
+          <div class="profile-slider" data-ranking="local-most-visited">
+             <!-- 1ST Most VISITED Profiles -->
+             <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🥇</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 2ND Most VISITED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🥈</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 3RD Most VISITED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🥉</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 4TH Most  VISITED Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🏅</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <!-- Add more cards here -->
+          </div>
+
+
+          <!-- Local Most Active Profiles -->
+          <div class="profile-slider" data-ranking="local-most-active">
+            <!-- 1ST Most ACTIVE Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🥇</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 2ND Most ACTIVE Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🥈</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 3RD Most ACTIVE Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🥉</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+
+            <!-- 4TH Most ACTIVE Profiles -->
+            <div class="profile-card">
+              <div class="profile-image-container">
+                <img src="{%static 'assets/images/skylar.jpg'%}" alt="Profile" />
+                <div class="ranking">🏅</div>
+              </div>
+              <div class="profile-content">
+                <a class="profile-name" href="{% url 'profile' %}">Ed Caluag, 24</a>
+                <div class="profile-location">📍 Cebu, Philippines</div>
+                <div class="profile-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slider-controls">
+            <button class="slider-btn prev-btn">❮</button>
+            <button class="slider-btn next-btn">❯</button>
+          </div>
+        </div>
+
+        <div class="global-ranking">
+          <h2>Local Rankings</h2>
+          <div class="ranking-tabs">
+            <button
+              class="tab active"
+              onclick="showRanking('local-most-liked')">
+              Most Liked
+            </button>
+            <button class="tab" onclick="showRanking('local-most-visited')">
+              Most Visited
+            </button>
+            <button class="tab" onclick="showRanking('local-most-active')">
+              Most Active
+            </button>
+          </div>
+            <!-- Tables content same as before -->
+            <div class="sulod">
+              <table
+                id="local-most-liked"
+                class="ranking-table local-ranking-table">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Likes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>ChatterBox</td>
+                    <td>250</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>EngagerPro</td>
+                    <td>220</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table
+                id="local-most-visited"
+                class="ranking-table local-ranking-table"
+                style="display: none">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Visits</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>ChatterBox</td>
+                    <td>250</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>EngagerPro</td>
+                    <td>220</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table
+                id="local-most-active"
+                class="ranking-table local-ranking-table"
+                style="display: none">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Activity Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>ChatterBox</td>
+                    <td>250</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>EngagerPro</td>
+                    <td>220</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td>SocialButterfly</td>
+                    <td>200</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{%static 'assets/js/explore.js'%}"></script>
+  </body>
+</html>

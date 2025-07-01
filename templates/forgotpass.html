@@ -1,0 +1,51 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PerfectMatch | forgot password</title>
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/auth.css' %}" />
+  </head>
+  <body class="auth-page dark-theme">
+    <div class="auth-container">
+      <div class="auth-sidebar">
+        <div class="logo">PerfectMatch</div>
+        <p class="tagline">Let's get you back into your account.</p>
+      </div>
+      <div class="auth-content">
+        <h2>Forgot Your Password?</h2>
+        <p class="explanatory-text">
+          Enter the email address associated with your account and we'll send
+          you instructions to reset your password.
+        </p>
+        <form class="auth-form" id="forgotPasswordForm">
+          <div class="input-group">
+            <label for="forgot-email">Email Address</label>
+            <input
+              type="email"
+              id="forgot-email"
+              name="forgot-email"
+              required />
+          </div>
+          <button type="submit" class="auth-button primary-button">
+            Send Reset Instructions
+          </button>
+        </form>
+        <div class="auth-links">
+          <a href="{% url 'signin' %}">Back to Sign In</a>
+        </div>
+      </div>
+      <div class="auth-footer">
+        <ul>
+          <li><a href="{% url 'terms' %}">Terms</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+          <li><a href="{% url 'help' %}">Help</a></li>
+          <li><a href="{% url 'services' %}">Services</a></li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

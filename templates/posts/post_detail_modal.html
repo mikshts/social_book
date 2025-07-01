@@ -1,0 +1,7 @@
+<div class="bookmark-modal-inner">
+  <h3>{{ post.user.username }}'s Post</h3>
+  <p>{{ post.caption }}</p>
+  {% if post.image %}
+    <img src="{{ post.image.url }}" alt="Post image" style="width: 100%; margin-top: 10px;" />
+  {% endif %}
+</div>

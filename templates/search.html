@@ -1,0 +1,213 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PerfectMatch | search</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="{%static 'assets/css/search.css'%}" />
+    <link rel="stylesheet" href="{%static 'assets/css/style.css'%}" />
+  </head>
+  <body>
+    <!--sayop delete lang-->
+
+    {%include 'navbar.html'%}
+    <!--sayop-->
+
+    <main class="search-container">
+      <h1 class="search-title">Search Results for "{{ query }}"</h1>
+
+      {% if profiles %}
+      <div class="results-grid">
+        <!-- <-- Add this wrapper -->
+        {% for profile in profiles %}
+        <div class="result-card">
+          <img
+            src="{{ profile.profileimg.url }}"
+            alt="{{ profile.user.username }}" />
+          <div class="result-info">
+            <h3>{{ profile.user.username }}</h3>
+            <p class="location">{{ profile.location }}</p>
+            <p class="bio">{{ profile.bio|truncatewords:15 }}</p>
+            <div class="actions">
+              <a
+                href="{% url 'public_profile' profile.user.username %}"
+                class="btn btn-primary">
+                View Profile
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <!-- <-- Close the wrapper -->
+      {% else %}
+      <p>No users found.</p>
+      {% endif %}
+    </main>
+  </body>
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // --- Elements for the Diamond Benefits Notice (using original popup IDs) ---
+    const benefitsNoticePopup = $("#popup"); // This is now the benefits notice
+    const closeBenefitsNoticeBtn = $("#close-popup"); // Close button for the benefits notice
+    const buyDiamondsBtnFromNotice = $("#buy-diamonds-btn-from-notice"); // Button inside the benefits notice
+
+    // --- Elements for the Navbar Button and NEW Diamond Purchase Modal ---
+    const buyDiamondsBtnNav = $("#buy-diamonds-btn"); // The button in the nav
+    const diamondPurchaseModal = $("#diamondPurchaseModal"); // A NEW, separate modal for purchase
+    const closePurchaseModalBtn = $("#close-purchase-modal"); // Close button for purchase modal
+
+    // Elements for the quantity selector within the purchase modal (ensure these IDs are unique to that modal)
+    const incrementDiamondsBtn = $("#increment-diamonds");
+    const decrementDiamondsBtn = $("#decrement-diamonds");
+    const diamondAmountInput = $("#diamond-amount");
+    const diamondPriceSpan = $("#diamond-price");
+    const buyDiamondsNowButton = $("#buy-diamonds-now-button");
+    const paymentMessage = $("#payment-message");
+    const userDiamondCount = $("#user-diamond-count"); // Assuming this is in your nav
+
+    // Define tiered pricing and a base rate for non-tier amounts (same as before)
+    const pricingTiers = {
+      10: 15.0, // 10 diamonds for 15 PHP
+      20: 25.0, // 20 diamonds for 25 PHP
+      50: 50.0, // 50 diamonds for 50 PHP
+      100: 90.0, // 100 diamonds for 90 PHP
+      200: 160.0, // 200 diamonds for 160 PHP
+      500: 350.0, // 500 diamonds for 350 PHP
+      1000: 600.0, // 1000 diamonds for 600 PHP
+    };
+    const baseRatePerDiamond = 1.5;
+
+    function calculatePrice(diamonds) {
+      if (pricingTiers.hasOwnProperty(diamonds)) {
+        return pricingTiers[diamonds].toFixed(2);
+      } else {
+        return (diamonds * baseRatePerDiamond).toFixed(2);
+      }
+    }
+
+    // Function to update diamond amount and price display for the purchase modal
+    function updateDiamondDisplay() {
+      let currentDiamonds = parseInt(diamondAmountInput.val());
+      let currentPrice = calculatePrice(currentDiamonds);
+      diamondPriceSpan.text(currentPrice);
+    }
+
+    // Initialize display for the purchase modal (only if it exists)
+    if (diamondAmountInput.length) {
+      // Check if the purchase modal elements exist
+      updateDiamondDisplay();
+    }
+
+    // --- Event Listeners for the Diamond Benefits Notice (using #popup) ---
+
+    // Example: Open the Benefits Notice automatically after a short delay on page load
+    // You can also trigger this from another button, or on first visit etc.
+
+    // Button inside Benefits Notice to open the NEW Diamond Purchase Modal
+    buyDiamondsBtnFromNotice.on("click", function () {
+      benefitsNoticePopup.css("display", "none"); // Close the benefits notice
+      diamondPurchaseModal.css("display", "block"); // Open the purchase modal
+      paymentMessage.hide().text(""); // Clear any previous messages in purchase modal
+      diamondAmountInput.val(10); // Reset purchase modal to first tier
+      updateDiamondDisplay();
+    });
+
+    // --- Event Listeners for the Navbar "Buy Diamonds" Button (now opens purchase modal directly) ---
+    buyDiamondsBtnNav.on("click", function () {
+      diamondPurchaseModal.css("display", "block");
+      paymentMessage.hide().text(""); // Clear any previous messages in purchase modal
+      diamondAmountInput.val(10); // Reset purchase modal to first tier
+      updateDiamondDisplay();
+    });
+
+    // --- Event Listeners for the NEW Diamond Purchase Modal ---
+
+    // Close the Diamond Purchase Modal
+    closePurchaseModalBtn.on("click", function () {
+      diamondPurchaseModal.css("display", "none");
+    });
+
+    // Close the purchase modal if user clicks outside of it
+    $(window).on("click", function (event) {
+      if ($(event.target).is(diamondPurchaseModal)) {
+        diamondPurchaseModal.css("display", "none");
+      }
+    });
+
+    // Diamond Quantity Control for Purchase Modal
+    incrementDiamondsBtn.on("click", function () {
+      let currentDiamonds = parseInt(diamondAmountInput.val());
+      let newDiamonds =
+        currentDiamonds + parseInt(diamondAmountInput.attr("step"));
+      diamondAmountInput.val(newDiamonds);
+      updateDiamondDisplay();
+    });
+
+    decrementDiamondsBtn.on("click", function () {
+      let currentDiamonds = parseInt(diamondAmountInput.val());
+      let minDiamonds = parseInt(diamondAmountInput.attr("min"));
+      let newDiamonds =
+        currentDiamonds - parseInt(diamondAmountInput.attr("step"));
+      if (newDiamonds >= minDiamonds) {
+        diamondAmountInput.val(newDiamonds);
+        updateDiamondDisplay();
+      }
+    });
+
+    // AJAX Payment Integration for Purchase Modal
+    buyDiamondsNowButton.on("click", function () {
+      const diamondsToBuy = parseInt(diamondAmountInput.val());
+      const priceToPay = parseFloat(diamondPriceSpan.text());
+
+      buyDiamondsNowButton.prop("disabled", true).text("Processing...");
+      paymentMessage.hide().removeClass("success error");
+
+      $.ajax({
+        url: "/buy_diamonds/",
+        method: "POST",
+        data: {
+          diamonds: diamondsToBuy,
+          price: priceToPay,
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function (response) {
+          if (response.success) {
+            paymentMessage.text(
+              "Payment successful! You received " + diamondsToBuy + " diamonds."
+            );
+            paymentMessage.css("color", "green").addClass("success").show();
+            userDiamondCount.text(response.new_diamond_count);
+            setTimeout(() => {
+              diamondPurchaseModal.css("display", "none");
+              buyDiamondsNowButton.prop("disabled", false).text("Pay Now");
+            }, 1500);
+          } else {
+            paymentMessage.text(
+              "Payment failed: " +
+                (response.message || "An unknown error occurred.")
+            );
+            paymentMessage.css("color", "red").addClass("error").show();
+            buyDiamondsNowButton.prop("disabled", false).text("Pay Now");
+          }
+        },
+        error: function (xhr, status, error) {
+          paymentMessage.text(
+            "An error occurred during payment. Please try again."
+          );
+          paymentMessage.css("color", "red").addClass("error").show();
+          buyDiamondsNowButton.prop("disabled", false).text("Pay Now");
+          console.error("AJAX Error:", status, error);
+          console.error("Response Text:", xhr.responseText);
+        },
+      });
+    });
+  });
+</script>

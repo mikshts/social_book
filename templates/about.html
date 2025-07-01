@@ -1,0 +1,60 @@
+{% load static %}
+<!-- Load static files -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PerfectMatch | about us</title>
+    <link rel="stylesheet" href="{% static 'assets/css/legal.css' %}" />
+  </head>
+  <body class="legal-page">
+    <div class="legal-container">
+      <header class="legal-header">
+        <h1>About PerfectMatch</h1>
+      </header>
+
+      <main class="legal-content">
+        <section class="legal-section">
+          <h2>Our Mission</h2>
+          <p>
+            Snag is built with the mission to empower creativity and foster a
+            vibrant community where creators can connect, share their
+            inspirations, and showcase their unique projects to the world.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>What We Offer</h2>
+          <p>
+            Our platform provides a space to discover diverse talents, gain
+            inspiration from groundbreaking ideas, and receive constructive
+            feedback on your work. Whether you're an artist, designer,
+            developer, writer, or any other type of creator, Snag is your hub.
+          </p>
+          <ul>
+            <li>Connect with a global network of creators.</li>
+            <li>Explore a curated feed of inspiring projects.</li>
+            <li>Showcase your portfolio and creative process.</li>
+            <li>Engage with the community through comments and feedback.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h2>Our Team</h2>
+          <p>
+            Snag is brought to you by a team of passionate individuals who
+            believe in the power of collaboration and the beauty of creation. We
+            are dedicated to building a platform that supports and celebrates
+            the creative journey.
+          </p>
+        </section>
+      </main>
+
+      <footer class="legal-footer">
+        <a href="{% url 'signin' %}" class="back-button">Go Back</a>
+      </footer>
+    </div>
+  </body>
+</html>

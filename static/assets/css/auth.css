@@ -1,0 +1,220 @@
+/* Base Styles */
+.auth-container {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  background-color: #18191a;
+  color: #e4e6eb;
+}
+
+a {
+  color: black; /* or your preferred color */
+  text-decoration: none; /* optional */
+}
+
+a:visited {
+  color: black; /* override violet */
+}
+
+.auth-sidebar {
+  flex: 1 1 300px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.auth-sidebar .logo {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #3a86e9;
+}
+
+.auth-sidebar .tagline {
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  color: #b0b3b8;
+}
+
+.auth-content {
+  flex: 1 1 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  min-width: 0;
+}
+
+.auth-content h2 {
+  margin-bottom: 20px;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  color: #e4e6eb;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.9em;
+  color: #b0b3b8;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  padding: 10px;
+  border: 1px solid #3a3b3c;
+  background-color: #303132;
+  color: #e4e6eb;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #3a86e9;
+  outline: none;
+  box-shadow: 0 0 5px rgba(58, 134, 233, 0.4);
+}
+
+.auth-button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.auth-button:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.primary-button {
+  background-color: #3a86e9;
+  color: white;
+}
+
+.auth-links {
+  font-size: 0.9em;
+  color: #b0b3b8;
+  text-align: center;
+}
+
+.auth-links a {
+  color: #3a86e9;
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+}
+
+.auth-footer {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #3a3b3c;
+}
+
+.auth-footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.auth-footer ul li a {
+  color: #b0b3b8;
+  text-decoration: none;
+  font-size: 0.8em;
+}
+
+.auth-footer ul li a:hover {
+  text-decoration: underline;
+}
+
+.explanatory-text {
+  color: #b0b3b8;
+  font-size: 0.9em;
+  margin-bottom: 20px;
+  line-height: 1.5;
+  text-align: center;
+}
+/* Responsive Enhancements */
+@media (max-width: 1024px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-sidebar,
+  .auth-content {
+    max-width: 100%;
+    flex: 1 1 100%;
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-form {
+    gap: 10px;
+  }
+
+  .input-group input {
+    padding: 8px;
+    font-size: 0.95em;
+  }
+
+  .auth-button {
+    font-size: 0.95em;
+    padding: 10px 18px;
+  }
+
+  .auth-footer ul {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-container {
+    /* Reduce the gap between sidebar and content if needed, or remove if you want content to butt right up */
+    gap: 0px; 
+  }
+
+  .auth-sidebar {
+    padding-bottom: 0px; /* Further reduce bottom space after logo/tagline */
+  }
+
+  .auth-content {
+    padding-top: 10px; /* Adjust this value to bring it closer. Smaller value = closer. */
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 0; /* Remove bottom padding if it's causing extra space */
+    margin-top: -20px; /* This is the key to pulling it up. Adjust this value. */
+  }
+
+  .auth-sidebar .logo {
+    font-size: 1.4em;
+    margin-bottom: 5px; /* Further reduce space below logo */
+  }
+
+  .auth-sidebar .tagline {
+    font-size: 0.85em;
+    margin-bottom: 5px; /* Further reduce space below tagline */
+  }
+}

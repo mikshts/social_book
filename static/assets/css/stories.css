@@ -1,0 +1,432 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+:root {
+  --primary-color-hue: 252;
+  --dark-color-lightness: 17%;
+  --light-color-lightness: 95%;
+  --white-color-lightness: 100%;
+
+  --color-white: hsl(252, 30%, var(--white-color-lightness));
+  --color-light: hsl(252, 30%, var(--light-color-lightness));
+  --color-grey: hsl(252, 15%, 65%);
+  --color-primary: hsl(var(--primary-color-hue), 75%, 60%);
+  --color-secondary: hsl(252, 100%, 90%);
+  --color-success: hsl(120, 95%, 65%);
+  --color-danger: hsl(0, 95%, 65%);
+  --color-dark: hsl(252, 30%, var(--dark-color-lightness));
+  --color-black: hsl(252, 30%, 10%);
+
+  --border-radius: 2rem;
+  --card-border-radius: 1rem;
+  --btn-padding: 0.6rem 2rem;
+  --search-padding: 0.6rem 1rem;
+  --card-padding: 1rem;
+
+  --sticky-top-left: 5.4rem;
+  --sticky-top-right: -18rem;
+}
+
+/* ================== BASE STYLES ================== */
+.story-viewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.story-container {
+  position: relative;
+  width: 400px;
+  height: 620px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.story-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Progress Bar */
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: var(--color-grey);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.progress {
+  height: 100%;
+  width: 0;
+  background: var(--color-primary);
+  animation: progressAnim 5s linear forwards;
+}
+
+/* Navigation Buttons */
+.prev-story,
+.next-story {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32px;
+  color: white;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  user-select: none;
+  z-index: 10000;
+}
+
+.prev-story {
+  left: 50px;
+}
+
+.next-story {
+  right: 50px;
+}
+
+/* Close Button */
+.close-story {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 26px;
+  color: var(--color-light);
+  cursor: pointer;
+  user-select: none;
+  z-index: 10000;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ======================= STORY INFO ======================== */
+.story-info {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  z-index: 11;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+.story-profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  transition: transform 0.3s ease;
+}
+
+.story-profile:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.story-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+  line-height: 1.2;
+}
+
+.story-username {
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.story-timezone {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* ======================= STORY ACTIONS ======================== */
+.story-actions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px 20px;
+  z-index: 25;
+}
+
+.action-btn.close-bottom-btn {
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: none;
+  font-size: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn.like-bottom-btn {
+  background-color: rgba(0, 255, 0, 0.7);
+  color: white;
+  border: none;
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn.message-bottom-btn {
+  background: rgba(0, 123, 255, 0.7);
+  color: white;
+  border-radius: 25px;
+  padding: 8px 18px;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.action-btn.close-bottom-btn:hover {
+  background-color: rgba(255, 0, 0, 0.9);
+}
+
+.action-btn.like-bottom-btn:hover {
+  background-color: rgba(0, 255, 0, 0.9);
+}
+
+.action-btn.message-bottom-btn:hover {
+  background: rgba(0, 123, 255, 0.9);
+}
+
+.story-actions-left {
+  display: none;
+}
+
+.story-snag-btn {
+  display: none;
+}
+
+/* ======================= RESPONSIVE ======================== */
+
+/* Large tablets and smaller desktops */
+@media (max-width: 1024px) {
+  .story-container {
+    width: 350px;
+    height: 540px;
+  }
+
+  /*navbotton*/
+  /* Navigation Buttons */
+  .prev-story,
+  .next-story {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 28px;
+    left: 30px;
+    right: 30px;
+    color: white;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    user-select: none;
+    z-index: 10000;
+  }
+
+  .prev-story {
+    left: 30px;
+  }
+
+  .next-story {
+    right: 30px;
+  }
+
+  /* Close Button */
+  .close-story {
+    position: fixed;
+    font-size: 24px;
+    top: 15px;
+    right: 15px;
+    color: var(--color-light);
+    cursor: pointer;
+    user-select: none;
+    z-index: 10000;
+  }
+  /*end of nav botton*/
+  .story-profile {
+    width: 36px;
+    height: 36px;
+    border-width: 1.8px;
+  }
+
+  .story-username {
+    font-size: 14px;
+  }
+
+  .story-timezone {
+    font-size: 11px;
+  }
+
+  .action-btn.close-bottom-btn,
+  .action-btn.like-bottom-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+  }
+
+  .action-btn.message-bottom-btn {
+    padding: 6px 14px;
+    font-size: 14px;
+  }
+}
+
+/* Tablets and large phones */
+@media (max-width: 768px) {
+  .story-container {
+    width: 95vw;
+    height: 170vw;
+    max-width: 400px;
+    max-height: 700px;
+  }
+
+  .close-story,
+  .prev-story,
+  .next-story {
+    display: none;
+  }
+
+  .story-profile {
+    width: 30px;
+    height: 30px;
+    border-width: 1.5px;
+  }
+
+  .story-username {
+    font-size: 13px;
+  }
+
+  .story-timezone {
+    font-size: 10px;
+  }
+
+  .action-btn.close-bottom-btn,
+  .action-btn.like-bottom-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+  }
+
+  .action-btn.message-bottom-btn {
+    padding: 6px;
+  }
+  /* Base styles already defined above */
+
+  /* Small phone responsiveness */
+  @media (max-width: 480px) {
+    .story-container {
+      width: 100vw; /* Full width on small phones */
+      height: 180vw; /* Taller to keep aspect ratio */
+      border-radius: 1rem; /* Slightly smaller radius for small screens */
+    }
+
+    .story-image {
+      border-radius: 1rem; /* Match container rounding */
+    }
+
+    .progress-bar {
+      height: 4px; /* Slightly thinner on phones */
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+    }
+    /* Hide close, prev, next buttons on small/mobile screens */
+    .close-story,
+    .prev-story,
+    .next-story {
+      display: none;
+    }
+
+    .story-info {
+      top: 12px;
+      left: 12px;
+      padding: 4px 8px;
+      border-radius: 10px;
+    }
+
+    .story-profile {
+      width: 28px;
+      height: 28px;
+      border-width: 1.3px;
+    }
+
+    .story-username {
+      font-size: 12px;
+    }
+
+    .story-timezone {
+      font-size: 9px;
+    }
+
+    .story-actions {
+      padding: 8px 12px;
+    }
+
+    .action-btn.close-bottom-btn,
+    .action-btn.like-bottom-btn {
+      width: 30px;
+      height: 30px;
+      font-size: 18px;
+    }
+
+    .action-btn.message-bottom-btn {
+      padding: 6px 14px;
+      font-size: 14px;
+    }
+  }
+}
+@keyframes progressAnim {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}

@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat with {{ receiver.username }}</title>
+    <link rel="stylesheet" href="{% static 'assets/css/chat.css' %}" />
+  </head>
+  <body>
+    <div class="chat-container">
+      <h2>Chat with {{ receiver.username }}</h2>
+
+      <span id="receiverId" style="display: none">{{ receiver.id }}</span>
+      <span id="currentUserId" style="display: none">{{ request.user.id }}</span>
+      <span id="currentUsername" style="display: none">{{ request.user.username }}</span>
+
+      <div id="chatLog">
+        {% for message in past_messages %}
+          <div class="message-bubble {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+            {% if message.sender != request.user %}
+              <span class="sender-name">{{ message.sender.username }}</span>
+            {% endif %}
+            <span class="message-content">{{ message.content }}</span>
+            <span class="timestamp">{{ message.timestamp|date:"H:i" }}</span>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="message-input-area">
+        <input type="text" id="messageInput" placeholder="Type a message" />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script src="{% static 'assets/js/chat.js' %}"></script>
+  </body>
+</html>

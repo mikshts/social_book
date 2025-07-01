@@ -1,0 +1,137 @@
+/* Existing CSS (no changes) */
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f8f0ff;
+  margin: 0;
+  padding: 20px;
+}
+
+.survey-container {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(142, 68, 173, 0.2);
+  margin-top: 70px;
+}
+
+h3 {
+  color: #8e44ad;
+}
+
+.form-page {
+  display: none;
+}
+
+.form-page.active {
+  display: block;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.navigation {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.navigation button {
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.navigation button:hover {
+  background-color: #732d91;
+}
+
+/* Original, generic custom-checkbox-group styles (these are fine as they apply elsewhere) */
+.custom-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Original, generic custom-checkbox-group-scrollable styles (these are fine as they apply elsewhere) */
+.custom-checkbox-group-scrollable {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* --- MODIFICATIONS FOR HOBBIES SECTION ONLY START HERE --- */
+
+.hobbies-section-scrollable {
+  /* This outer container provides the horizontal scroll */
+  overflow-x: auto;
+  /* white-space: nowrap; (Removed - we want wrapping within the height) */
+  margin-bottom: 15px;
+  padding-bottom: 10px; /* Add some padding if the scrollbar is obscuring content */
+
+  /* Set a height that accommodates exactly three rows of checkboxes + gaps */
+  /* Calculation: (Label height + vertical padding + border) * 3 + (gap between rows * 2) */
+  /* Assuming label height approx 36px (8px padding top/bottom + 2px border top/bottom) */
+  height: calc((36px + 10px) * 3 + 10px * 2); /* Approx. 168px - adjust 36px if your label's natural height is different */
+  display: flex; /* Helps ensure inner flex container behaves as expected */
+  align-items: flex-start; /* Align content to the top within the scrollable area */
+}
+
+.hobbies-section-scrollable .custom-checkbox-group {
+  /* This inner container lays out items in columns and wraps horizontally */
+  display: flex;
+  flex-direction: column; /* Items stack vertically to form columns */
+  flex-wrap: wrap; /* Columns wrap horizontally */
+  gap: 10px; /* Gap between items (both row and column) */
+  height: 100%; /* Important: Makes the flex container fill the parent's fixed height */
+  margin-bottom: 0; /* Remove redundant margin */
+  flex-grow: 0;
+  flex-shrink: 0; /* Prevents shrinking, ensures it takes full width needed for columns */
+  align-content: flex-start; /* Aligns columns to the start (left) */
+}
+
+.hobbies-section-scrollable .custom-checkbox {
+  /* Ensure individual checkboxes maintain their size */
+  flex-shrink: 0; /* Prevent shrinking */
+  display: block; /* Ensure it takes full width within its flex column */
+}
+
+/* --- NO CHANGES BELOW THIS LINE --- */
+
+.custom-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.custom-checkbox label {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + label {
+  background-color: #8e44ad;
+  border-color: #8e44ad;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 5px rgba(142, 68, 173, 0.5);
+}

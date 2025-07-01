@@ -1,0 +1,138 @@
+<body>
+  <div class="survey-container">
+    <form id="surveyForm">
+      <div class="progress-indicator" id="progressIndicator"></div>
+
+      <!-- Page 1 -->
+      <div class="form-page active">
+        <h3>1. Basic Info</h3>
+        <label>Gender:</label><br />
+        <input type="checkbox" name="gender" value="Male" />Male
+        <input type="checkbox" name="gender" value="Female" />Female
+        <input type="checkbox" name="gender" value="Non-binary" />Non-binary
+        <input type="checkbox" name="gender" value="Prefer not to say" />Prefer
+        not to say <br /><br />
+        <label>Looking for:</label><br />
+        <input type="checkbox" name="looking_for" value="Male" />Male
+        <input type="checkbox" name="looking_for" value="Female" />Female
+        <input
+          type="checkbox"
+          name="looking_for"
+          value="Non-binary" />Non-binary
+        <input type="checkbox" name="looking_for" value="Open to all" />Open to
+        all <br /><br />
+        <label>Age Range Preference:</label><br />
+        <input type="checkbox" name="age_range" value="18–24" />18–24
+        <input type="checkbox" name="age_range" value="25–34" />25–34
+        <input type="checkbox" name="age_range" value="35–44" />35–44
+        <input type="checkbox" name="age_range" value="45+" />45+
+      </div>
+
+      <!-- Page 2 -->
+      <div class="form-page">
+        <h3>2. Relationship Goals</h3>
+        <label>What are you looking for?</label><br />
+        <input
+          type="checkbox"
+          name="goal"
+          value="Long-term relationship" />Long-term relationship<br />
+        <input
+          type="checkbox"
+          name="goal"
+          value="Short-term dating" />Short-term dating<br />
+        <input type="checkbox" name="goal" value="Friendship" />Friendship<br />
+        <input type="checkbox" name="goal" value="Marriage" />Marriage<br />
+        <input type="checkbox" name="goal" value="Just browsing" />Just
+        browsing<br /><br />
+
+        <label>How soon do you want to meet someone in person?</label><br />
+        <input type="checkbox" name="meet" value="ASAP" />ASAP
+        <input type="checkbox" name="meet" value="Few weeks" />In a few weeks
+        <input type="checkbox" name="meet" value="Not sure" />Not sure yet
+        <input type="checkbox" name="meet" value="Online only" />Online only
+      </div>
+
+      <!-- Page 3 -->
+      <div class="form-page">
+        <h3>3. Lifestyle & Interests</h3>
+        <label>Do you smoke?</label><br />
+        <input type="checkbox" name="smoke" value="Yes" />Yes
+        <input type="checkbox" name="smoke" value="No" />No
+        <input
+          type="checkbox"
+          name="smoke"
+          value="Occasionally" />Occasionally<br /><br />
+
+        <label>Do you drink alcohol?</label><br />
+        <input type="checkbox" name="drink" value="Yes" />Yes
+        <input type="checkbox" name="drink" value="No" />No
+        <input
+          type="checkbox"
+          name="drink"
+          value="Occasionally" />Occasionally<br /><br />
+
+        <label>Do you want children someday?</label><br />
+        <input type="checkbox" name="children" value="Yes" />Yes
+        <input type="checkbox" name="children" value="No" />No
+        <input type="checkbox" name="children" value="Maybe" />Maybe<br /><br />
+
+        <label>What are your hobbies or interests?</label><br />
+        <input type="checkbox" name="hobbies" value="Travel" />Travel
+        <input type="checkbox" name="hobbies" value="Fitness" />Fitness
+        <input type="checkbox" name="hobbies" value="Gaming" />Gaming
+        <input type="checkbox" name="hobbies" value="Music" />Music
+        <input type="checkbox" name="hobbies" value="Reading" />Reading
+        <input type="checkbox" name="hobbies" value="Cooking" />Cooking
+        <input
+          type="checkbox"
+          name="hobbies"
+          value="Movies/TV" />Movies/TV<br />
+        Other: <input type="text" name="other_hobbies" />
+      </div>
+
+      <!-- Page 4 -->
+      <div class="form-page">
+        <h3>4. Personality</h3>
+        <label>How would your friends describe you? (Select 3)</label><br />
+        <input type="checkbox" name="traits" value="Funny" />Funny
+        <input type="checkbox" name="traits" value="Ambitious" />Ambitious
+        <input type="checkbox" name="traits" value="Laid-back" />Laid-back
+        <input type="checkbox" name="traits" value="Caring" />Caring
+        <input type="checkbox" name="traits" value="Outgoing" />Outgoing
+        <input type="checkbox" name="traits" value="Shy" />Shy
+        <input type="checkbox" name="traits" value="Loyal" />Loyal
+        <input
+          type="checkbox"
+          name="traits"
+          value="Creative" />Creative<br /><br />
+
+        <label>Your love language?</label><br />
+        <input
+          type="checkbox"
+          name="love_language"
+          value="Words of Affirmation" />Words of Affirmation
+        <input
+          type="checkbox"
+          name="love_language"
+          value="Acts of Service" />Acts of Service
+        <input
+          type="checkbox"
+          name="love_language"
+          value="Receiving Gifts" />Receiving Gifts
+        <input
+          type="checkbox"
+          name="love_language"
+          value="Quality Time" />Quality Time
+        <input
+          type="checkbox"
+          name="love_language"
+          value="Physical Touch" />Physical Touch
+      </div>
+
+      <div class="navigation">
+        <button type="button" id="prevBtn">Previous</button>
+        <button type="button" id="nextBtn">Next</button>
+      </div>
+    </form>
+  </div>
+</body>

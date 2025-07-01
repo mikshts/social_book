@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PerfectMatch | bookmarks</title>
+
+    <!-- Fonts and Icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://unicons.iconscout.com/release/v3.0.0/css/line.css"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'assets/css/bookmarks.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+
+    <!-- Material Symbols -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=chat" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_diamond" />
+
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 0, "GRAD" 0, "opsz" 24;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% include 'navbar.html' %}
+
+    <div class="bookmark-wrapper">
+      <div class="bookmark-title">Your Bookmarks</div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterCards('all')">
+          All
+        </button>
+        <button class="filter-btn" onclick="filterCards('online')">
+          Online
+        </button>
+        <button class="filter-btn" onclick="filterCards('liked')">Liked</button>
+      </div>
+
+      <div class="scroll-area" id="bookmarkContainer">
+        {% for bookmark in bookmarks %}
+        <div
+          class="bookmark-card{% if bookmark.is_online %} online{% endif %}{% if bookmark.is_liked %} liked{% endif %}">
+          <div class="bookmark-header">
+            <div
+              class="user-info"
+              style="display: flex; align-items: center; gap: 10px">
+              <div class="profile-photo">
+                <a
+                  href="{% url 'public_profile' bookmark.post.user.username %}">
+                  <img
+                    src="{{ bookmark.post.user.profile.profileimg.url|default:'/static/blank_profile_picture.png' }}"
+                    alt="{{ bookmark.post.user.username }}"
+                    style="width: 40px; height: 40px; border-radius: 50%" />
+                </a>
+              </div>
+              <h3 style="display: flex; align-items: center; gap: 6px">
+                {{ bookmark.post.user.username }} 
+                {% if bookmark.post.user.profile.is_online %}
+                <span class="online-dot"></span>
+                {% else %}
+                <span class="offline-dot"></span>
+                {% endif %}
+              </h3>
+            </div>
+            <span
+              class="delete-bookmark"
+              onclick="deleteBookmark('{{ bookmark.post.id }}', this)"
+              >🗑️</span
+            >
+          </div>
+
+          <div class="bookmark-content">
+            <p>{{ bookmark.post.caption }}</p>
+          </div>
+          <button
+            class="view-post-btn"
+            onclick="openBookmarkPostModal('{{ bookmark.post.id }}')">
+            View Post
+          </button>
+        </div>
+        {% empty %}
+        <div id="noBookmarks">Bookmarks are empty.</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="bookmarkPostModal" class="bookmark-modal">
+      <div class="bookmark-modal-content">
+        <button class="close-bookmark-btn" onclick="closeBookmarkModal()">
+          ×
+        </button>
+        <div id="bookmarkModalContent">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/bookmarks.js' %}"></script>
+
+    <script>
+      function filterCards(filter) {
+        const cards = document.querySelectorAll(".bookmark-card");
+        cards.forEach((card) => {
+          card.style.display =
+            filter === "all" || card.classList.contains(filter)
+              ? "block"
+              : "none";
+        });
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        document
+          .querySelector(`.filter-btn[onclick="filterCards('${filter}')"]`)
+          .classList.add("active");
+      }
+
+      function deleteBookmark(postId, btn) {
+        fetch("{% url 'toggle_bookmark' %}", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `post_id=${postId}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "removed") {
+              btn.closest(".bookmark-card").remove();
+              if (document.querySelectorAll(".bookmark-card").length === 0) {
+                document.getElementById("noBookmarks").style.display = "block";
+              }
+            }
+          });
+      }
+
+      function openBookmarkPostModal(postId) {
+        const modal = document.getElementById("bookmarkPostModal");
+        const modalContent = document.getElementById("bookmarkModalContent");
+
+        modal.style.display = "block";
+        modalContent.innerHTML = "Loading...";
+
+        fetch(`/post_detail_modal/${postId}/`)
+          .then((response) => {
+            if (!response.ok) throw new Error("Network error");
+            return response.text();
+          })
+          .then((html) => {
+            // Check if HTML contains expected post content
+            if (
+              html.trim() === "" ||
+              html.includes("Error loading post details")
+            ) {
+              modalContent.innerHTML = "<p>Error loading post details.</p>";
+              setTimeout(() => {
+                modal.style.display = "none";
+              }, 2000);
+            } else {
+              modalContent.innerHTML = html;
+              // Do not auto-close — let user click ×
+            }
+          })
+          .catch((error) => {
+            modalContent.innerHTML = "<p>Error loading post details.</p>";
+            setTimeout(() => {
+              modal.style.display = "none";
+            }, 2000);
+          });
+      }
+
+      function closeBookmarkModal() {
+        document.getElementById("bookmarkPostModal").style.display = "none";
+      }
+
+      // Automatically open modal on load with first post (optional)
+    </script>
+  </body>
+</html>

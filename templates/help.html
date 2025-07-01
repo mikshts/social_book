@@ -1,0 +1,55 @@
+{% load static %}
+<!-- Load static files at the top -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PerfectMatch | help center</title>
+    <!-- Fix the static CSS path -->
+    <link rel="stylesheet" href="{% static 'assets/css/legal.css' %}" />
+  </head>
+  <body class="legal-page">
+    <div class="legal-container">
+      <header class="legal-header">
+        <h1>Help Center</h1>
+      </header>
+
+      <main class="legal-content">
+        <section class="legal-section">
+          <h2>Frequently Asked Questions</h2>
+
+          <div class="faq-item">
+            <h3>How do I create a post?</h3>
+            <p>
+              Click the "Create Post" button located in the left sidebar or the
+              top right corner of the screen.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3>How do I follow someone?</h3>
+            <p>
+              You can find other users through the search bar. On their profile,
+              click the "Follow" button.
+            </p>
+          </div>
+        </section>
+
+        <section class="legal-section">
+          <h2>Contact Us</h2>
+          <p>
+            If you need further assistance, please email our support team at
+            <a href="mailto:support@snag.com">support@snag.com</a>.
+          </p>
+        </section>
+      </main>
+
+      <footer class="legal-footer">
+        <!-- Fix the URL template tag -->
+        <a href="{% url 'signin' %}" class="back-button">Go Back</a>
+      </footer>
+    </div>
+  </body>
+</html>

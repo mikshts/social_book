@@ -1,0 +1,250 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PerfectMatch | analytics</title>
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css" />
+    <link rel="stylesheet" href="{% static 'assets/css/analytics.css' %}" />
+    <link rel="stylesheet" href="{%static 'assets/css/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_diamond" />
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+
+    <h1>Analytics Dashboard</h1>
+
+    <!-- Top Overview Cards -->
+    <div class="cards-container">
+      <div class="card">
+        <h2>Total Likes</h2>
+        <p>8,250</p>
+      </div>
+      <div class="card">
+        <h2>Total Matches</h2>
+        <p>3,410</p>
+      </div>
+      <div class="card">
+        <h2>Total Messages</h2>
+        <p>5,980</p>
+      </div>
+      <div class="card">
+        <h2>Active Users</h2>
+        <p>1,230</p>
+      </div>
+    </div>
+
+    <!-- Analytics Sections -->
+    <div class="analytics-container">
+      <!-- Pie Chart Analytics -->
+      <div class="chart-box">
+        <div class="section-title">User Interaction Breakdown</div>
+        <div class="pie-chart"></div>
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-color likes"></span> Likes – 40%
+          </div>
+          <div class="legend-item">
+            <span class="legend-color matches"></span> Matches – 30%
+          </div>
+          <div class="legend-item">
+            <span class="legend-color messages"></span> Messages – 20%
+          </div>
+          <div class="legend-item">
+            <span class="legend-color blocked"></span> Blocked – 10%
+          </div>
+        </div>
+      </div>
+
+      <div class="table-box">
+        <div class="section-title">User Activity Details</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Likes</th>
+              <th>Matches</th>
+              <th>Messages</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+        </table>
+
+        <!-- Scrollable body container -->
+        <div class="table-scroll">
+          <table>
+            <tbody>
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="red">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="orange">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="red">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="orange">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+              <tr>
+                <td>Samantha 💫</td>
+                <td>120</td>
+                <td>30</td>
+                <td>58</td>
+                <td class="green">Online</td>
+              </tr>
+              <!-- ... repeat rows as needed ... -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
