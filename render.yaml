@@ -6,12 +6,14 @@ services:
   - type: web
     name: PerfectMatch
     env: python
-    buildCommand: "./build.sh"
+    buildCommand: "pip install -r requirements.txt"
     startCommand: "daphne social_book.asgi:application"
-    preDeployCommand: "python manage.py migrate"
+    preDeployCommand: |
+      python manage.py migrate --noinput
+      python manage.py collectstatic --noinput
     envVars:
       - key: DEBUG
-        value: True
+        value: False
       - key: SECRET_KEY
         value: django-insecure-y0ur$uperSecr3tKey1234567890
       - key: REDIS_URL
