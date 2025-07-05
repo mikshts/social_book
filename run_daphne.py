@@ -6,12 +6,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'social_book.settings')
 import django
 django.setup()
 
-try:
-    from twisted.internet import epollreactor
-    epollreactor.install()
-    print("✅ Using epollreactor")
-except ImportError:
-    print("⚠️ epollreactor not available, using default reactor")
+# ✅ Removed epollreactor installation — not needed and causes errors
 
 from daphne.cli import CommandLineInterface
 
