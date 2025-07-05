@@ -5,3 +5,4 @@ channels-redis
 dj-database-url
 whitenoise
 psycopg2-binary
+Pillow
