@@ -3,6 +3,8 @@ from . import views
 from .views import profile_view
 from django.contrib import admin
 from .views import chat_view
+from .views import run_migrations
+
 
 urlpatterns = [
 
@@ -20,7 +22,9 @@ urlpatterns = [
     path('friend-request/respond/<int:request_id>/', views.respond_friend_request, name='respond_friend_request'),
     # Messaging
 
-        
+    path('run-migrations/', run_migrations),
+
+
 
 
     # auth

@@ -33,6 +33,21 @@ from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
+
+
+
+from django.http import HttpResponse
+from django.core.management import call_command
+from django.contrib.admin.views.decorators import staff_member_required
+
+@staff_member_required
+def run_migrations(request):
+    call_command("migrate", interactive=False)
+    return HttpResponse("Migrations complete!")
+
+
+
+
 @login_required(login_url='signin')
 def index(request):
     if request.method == 'POST':
