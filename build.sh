@@ -1,13 +1,12 @@
 #!/bin/bash
 
-echo "Installing dependencies..."
+# Install dependencies
 pip install -r requirements.txt
 
-echo "Collecting static files..."
+# Collect static files
 python manage.py collectstatic --noinput
 
-echo "Running migrations..."
-python manage.py migrate
+# Apply database migrations
+python manage.py migrate --noinput
 
-echo "Starting Daphne server..."
-daphne social_book.asgi:application
+# Done — this line runs the app (Render calls this in `startCommand`)
