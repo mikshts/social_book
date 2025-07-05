@@ -1,4 +1,4 @@
-// ------------------ DOM ELEMENTS ------------------
+// DOM ELEMENTS
 const modalImageSlider = document.querySelector(".modal-image-slider");
 const modalImageSlides = document.querySelectorAll(".modal-image-slide");
 const prevSlideBtn = document.querySelector(".prev-slide");
@@ -6,15 +6,21 @@ const nextSlideBtn = document.querySelector(".next-slide");
 const modalImage = document.querySelector(".modal-large-photo");
 const slideDotsContainer = document.querySelector(".slide-dots");
 
-// ------------------ MODAL FUNCTIONS ------------------
+// MODAL FUNCTIONS
 function openCommentPopup(postId) {
-  document.getElementById("commentModal-" + postId).style.display = "flex";
-  document.body.style.overflow = "hidden";
+  const modal = document.getElementById("commentModal-" + postId);
+  if (modal) {
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
 }
 
 function closeCommentPopup(postId) {
-  document.getElementById("commentModal-" + postId).style.display = "none";
-  document.body.style.overflow = "";
+  const modal = document.getElementById("commentModal-" + postId);
+  if (modal) {
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+  }
 }
 
 // Close modal when clicking background
@@ -26,20 +32,21 @@ document.querySelectorAll("[id^='commentModal-']").forEach((modal) => {
   });
 });
 
-// ------------------ SLIDER LOGIC ------------------
+// SLIDER LOGIC
 let slideIndex = 0;
 
 function showSlide(n) {
+  if (!modalImageSlider || modalImageSlides.length === 0) return;
   slideIndex = n;
-
   if (slideIndex < 0) slideIndex = 0;
   if (slideIndex >= modalImageSlides.length)
     slideIndex = modalImageSlides.length - 1;
 
   modalImageSlider.style.transform = `translateX(-${slideIndex * 100}%)`;
 
-  prevSlideBtn.disabled = slideIndex === 0;
-  nextSlideBtn.disabled = slideIndex === modalImageSlides.length - 1;
+  if (prevSlideBtn) prevSlideBtn.disabled = slideIndex === 0;
+  if (nextSlideBtn)
+    nextSlideBtn.disabled = slideIndex === modalImageSlides.length - 1;
 
   updateDots();
 }
@@ -59,6 +66,7 @@ function prevSlide() {
 }
 
 function createDots() {
+  if (!slideDotsContainer || modalImageSlides.length === 0) return;
   slideDotsContainer.innerHTML = "";
   modalImageSlides.forEach((_, index) => {
     const dot = document.createElement("div");
@@ -76,25 +84,27 @@ function updateDots() {
   });
 }
 
-prevSlideBtn.addEventListener("click", prevSlide);
-nextSlideBtn.addEventListener("click", nextSlide);
+if (prevSlideBtn) prevSlideBtn.addEventListener("click", prevSlide);
+if (nextSlideBtn) nextSlideBtn.addEventListener("click", nextSlide);
 
-showSlide(slideIndex);
-prevSlideBtn.disabled = true;
-createDots();
+if (modalImageSlides.length > 0) {
+  showSlide(slideIndex);
+  if (prevSlideBtn) prevSlideBtn.disabled = true;
+  createDots();
+}
 
-// ------------------ AJAX COMMENT SUBMISSION ------------------
-
-const commentSockets = {}; // ✅ Global socket cache
+// AJAX COMMENT SUBMISSION
+const commentSockets = {};
 
 document.addEventListener("DOMContentLoaded", function () {
+  const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
   document.querySelectorAll(".comment-form").forEach((form) => {
     const postId = form.dataset.postId;
 
-    // ✅ Avoid duplicate WebSocket
+    // Avoid duplicate WebSocket
     if (!commentSockets[postId]) {
       commentSockets[postId] = new WebSocket(
-        `ws://${window.location.host}/ws/comments/${postId}/`
+        `${wsProtocol}://${window.location.host}/ws/comments/${postId}/`
       );
 
       commentSockets[postId].onmessage = function (e) {
@@ -103,7 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
           `#commentModal-${postId} .modal-all-comments`
         );
         if (commentSection) {
-          const noCommentsMsg = commentSection.querySelector(".no-comments-msg");
+          const noCommentsMsg =
+            commentSection.querySelector(".no-comments-msg");
           if (noCommentsMsg) noCommentsMsg.style.display = "none";
 
           const newComment = document.createElement("div");
@@ -131,7 +142,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const submitBtn = this.querySelector('button[type="submit"]');
       const textInput = this.querySelector('input[name="comment_text"]');
       const commentText = textInput.value.trim();
-      const csrfToken = this.querySelector('input[name="csrfmiddlewaretoken"]').value;
+      const csrfToken = this.querySelector(
+        'input[name="csrfmiddlewaretoken"]'
+      ).value;
 
       const btnText = submitBtn.querySelector(".btn-text");
       const btnSpinner = submitBtn.querySelector(".btn-spinner");
@@ -156,6 +169,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (response.ok) {
           if (socket.readyState === WebSocket.OPEN) {
             socket.send(JSON.stringify({ text: commentText }));
+          } else {
+            alert("Comment socket not connected.");
           }
           textInput.value = "";
         } else {

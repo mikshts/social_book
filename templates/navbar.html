@@ -60,27 +60,32 @@
 </div>
 
 <script>
-  document
-    .getElementById("search-input")
-    .addEventListener("input", function () {
+  document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("search-input");
+    if (!input) return; // Optional: safely exit if element doesn't exist
+
+    input.addEventListener("input", function () {
       const query = this.value;
+      const resultsDiv = document.getElementById("search-results");
+      if (!resultsDiv) return;
+
       if (query.trim() !== "") {
         fetch(`/search-users/?q=${query}`)
           .then((res) => res.json())
           .then((data) => {
-            const resultsDiv = document.getElementById("search-results");
             resultsDiv.innerHTML = "";
             data.results.forEach((user) => {
               resultsDiv.innerHTML += `
-            <div class="search-user">
-              <img src="${user.profileimg}" width="30" style="border-radius: 50%;" />
-              <span>${user.username}</span>
-            </div>
-          `;
+                <div class="search-user">
+                  <img src="${user.profileimg}" width="30" style="border-radius: 50%;" />
+                  <span>${user.username}</span>
+                </div>
+              `;
             });
           });
       } else {
-        document.getElementById("search-results").innerHTML = "";
+        resultsDiv.innerHTML = "";
       }
     });
+  });
 </script>

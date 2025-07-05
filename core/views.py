@@ -28,13 +28,17 @@ from .models import (
 
 
 # social_book/core/views.py
+from .models import Bookmark
+from django.core.paginator import Paginator
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
-# Create your views here.
 @login_required(login_url='signin')
 def index(request):
     if request.method == 'POST':
         caption = request.POST.get('caption')
         image = request.FILES.get('image')
+
         if caption or image:
             Post.objects.create(
                 user=request.user,
@@ -44,18 +48,33 @@ def index(request):
                 created_at=timezone.now(),
                 updated_at=timezone.now()
             )
-            messages.success(request, "Post created successfully.")
+            # 🔒 Redirect to avoid double submission on refresh
             return redirect('index')
         else:
             messages.error(request, "Caption or image is required.")
+            return redirect('index')  # 👈 Redirect even on error to prevent resubmission
 
-    posts = Post.objects.all().order_by('-created_at')
-    for post in posts:
+    # Pagination logic
+    all_posts = Post.objects.all().order_by('-created_at')
+    paginator = Paginator(all_posts, 15)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    bookmarked_post_ids = set(
+        Bookmark.objects.filter(user=request.user).values_list('post_id', flat=True)
+    )
+
+    for post in page_obj:
         post.liked_users = [like.user for like in post.likes.select_related('user')[:3]]
         post.user_liked = post.likes.filter(user=request.user).exists()
-    return render(request, 'index.html', {'posts': posts})
+        post.bookmarked = post.id in bookmarked_post_ids
 
+    # AJAX support
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('posts/post_list.html', {'posts': page_obj}, request=request)
+        return JsonResponse({'html': html, 'has_next': page_obj.has_next()})
 
+    return render(request, 'index.html', {'posts': page_obj})
 
 def signup(request):
 
@@ -508,19 +527,21 @@ def profile_view(request):
         else:
             profile.height = None
 
-        # Weight validation
+        # Weight validation (must be in kg)
+       # Weight validation (must be in kg)
         weight_str = request.POST.get('weight', '').strip()
         if weight_str:
             try:
                 weight = Decimal(weight_str)
                 if not (Decimal('30') <= weight <= Decimal('500')):
-                    errors['weight'] = "Weight must be between 30 and 500."
+                    errors['weight'].append("Weight must be between 30 and 500 kg.")
                 else:
                     profile.weight = weight
             except (ValueError, InvalidOperation):
-                errors['weight'] = "Weight must be a valid number (e.g. 55.5)."
+                errors['weight'].append("Weight must be a valid number in kg (e.g. 55.5).")
         else:
             profile.weight = None
+
 
         # Birthday validation
         birthday_str = request.POST.get('birthday', '').strip()
@@ -880,3 +901,93 @@ def bookmark_list(request):
 def post_detail_modal(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     return render(request, 'posts/post_detail_modal.html', {'post': post})
+
+# friend_requests/views.py____________-------------ubrahunin -------_____________
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from .models import FriendRequest, Profile
+from django.contrib.auth.models import User
+
+@login_required
+def send_friend_request(request, user_id):
+    to_user = get_object_or_404(User, id=user_id)
+    friend_request, created = FriendRequest.objects.get_or_create(from_user=request.user, to_user=to_user)
+    if not created:
+        return JsonResponse({'status': 'already_sent'})
+    return JsonResponse({'status': 'request_sent'})
+
+@login_required
+def respond_friend_request(request, request_id):
+    friend_request = get_object_or_404(FriendRequest, id=request_id)
+
+    if friend_request.to_user != request.user:
+        return JsonResponse({'status': 'unauthorized'}, status=403)
+
+    action = request.POST.get("action")
+
+    if action == "accept":
+        friend_request.is_accepted = True
+        friend_request.save()
+        return JsonResponse({'status': 'accepted'})
+    elif action == "decline":
+        friend_request.delete()
+        return JsonResponse({'status': 'declined'})
+    return JsonResponse({'status': 'invalid_action'}, status=400)
+
+
+from django.contrib.auth.decorators import login_required
+from django.db.models import Max, Q
+from .models import Message, Profile, User
+
+@login_required
+def message_list_view(request):
+    user = request.user
+
+    # Get the latest message per conversation partner
+    latest_messages = (
+        Message.objects.filter(Q(sender=user) | Q(receiver=user))
+        .order_by('receiver', '-timestamp')
+        .distinct('receiver')  # Works in PostgreSQL
+    )
+
+    # For SQLite/MySQL, manually filter latest message per partner:
+    # Optionally, group by each user, then get the latest message using a loop if necessary.
+
+    context = {
+        'messages': latest_messages,
+    }
+    return render(request, 'partials/message_list.html', context)
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q, Max
+from django.contrib.auth.models import User
+from django.shortcuts import render
+from .models import Message
+
+@login_required
+def recent_messages(request):
+    user = request.user
+
+    # Get latest message per conversation partner
+    # Step 1: Get all messages involving current user
+    all_messages = Message.objects.filter(
+        Q(sender=user) | Q(receiver=user)
+    ).order_by('-timestamp')
+
+    # Step 2: Track latest message per unique user pair
+    seen_users = set()
+    recent_conversations = []
+
+    for msg in all_messages:
+        other_user = msg.receiver if msg.sender == user else msg.sender
+        if other_user.id not in seen_users:
+            seen_users.add(other_user.id)
+            recent_conversations.append({
+                "user": other_user,
+                "message": msg,
+            })
+
+    return render(request, 'partials/message_list.html', {"conversations": recent_conversations})

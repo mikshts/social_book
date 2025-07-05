@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: social-book-backend
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "daphne social_book.asgi:application"
+    envVars:
+      - key: DEBUG
+        value: false
+      - key: SECRET_KEY
+        value: your-production-secret-key
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: social-book-redis
+          property: connectionString
+
+  - type: redis
+    name: social-book-redis
+    ipAllowList: []

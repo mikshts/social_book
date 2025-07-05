@@ -1,7 +1,7 @@
-<!-- templates/posts/post_single.html -->
-{%load static%}
+{% load static %}
 
 <div class="feed" id="post-{{ post.id }}">
+  <!-- Header -->
   <div class="head">
     <div class="user" style="display: flex; align-items: center; gap: 10px">
       <div class="profile-photo">
@@ -10,18 +10,16 @@
       </div>
       <div class="info">
         <h3 style="display: flex; align-items: center; gap: 6px">
-          {{ post.user.username }} 
-          {% if post.user.profile.is_online%}
+          {{ post.user.username }} {% if post.user.profile.is_online %}
           <span class="online-dot"></span>
-          {% else%}
+          {% else %}
           <span class="offline-dot"></span>
           {% endif %}
         </h3>
-
         <small
           class="post-time"
-          data-created-at="{{ post.created_at|date:'c' }}"
-          >{{ post.created_at|timesince }} ago
+          data-created-at="{{ post.created_at|date:'c' }}">
+          {{ post.created_at|timesince }} ago
         </small>
         |
         <small>{{ post.user.profile.location }}</small>
@@ -29,56 +27,66 @@
     </div>
 
     {% if user != post.user %}
-      <span class="chat">
-        <button
-          type="button"
-          title="Chat"
-          style="all: unset; cursor: pointer"
-          onclick="openChat({{ post.user.id }})">
-          <span class="material-symbols-outlined">chat</span>
-        </button>
-      </span>
-    {% endif %}
-
-
-    {% if user == post.user %}
+    <span class="chat">
+      <button
+        type="button"
+        title="Chat"
+        class="chat-btn"
+        onclick="openChat('{{ post.user.id }}')">
+        <span class="material-symbols-outlined">chat</span>
+      </button>
+    </span>
+    {% else %}
     <span class="edit">
-
       <button
         type="button"
         title="Delete"
         style="all: unset; cursor: pointer"
-        onclick="deletePost('{{ post.id }}')"><!-- gamiton and post.id kuwa sang psot sa bookmarks -->
+        onclick="deletePost('{{ post.id }}')">
         <span class="material-symbols-outlined">...</span>
       </button>
     </span>
     {% endif %}
   </div>
 
+  <!-- Post Image -->
   {% if post.image %}
   <div class="photo">
     <img src="{{ post.image.url }}" alt="Post Image" />
   </div>
   {% endif %}
+
+  <!-- Caption -->
   <div class="caption">
     <p><b>{{ post.user.username }}</b> {{ post.caption }}</p>
   </div>
-  <!-- Action Buttons ----------------->
+
+  <!-- Action Buttons -->
   <div class="action-buttons">
     <div class="interaction-buttons">
-      <!--like heart-->
-      <span id="like-btn-{{ post.id }}" onclick="toggleLike('{{ post.id }}')">
+      <!-- Like Button -->
+      <span
+        id="like-btn-{{ post.id }}"
+        class="like-btn"
+        data-post-id="{{ post.id }}"
+        title="Like">
         <i class="uil uil-heart {% if post.user_liked %}liked{% endif %}"></i>
       </span>
-      <!--comment bubble-->
-      <span>
+
+      <!-- Comment Button -->
+      <span title="Comment">
         <i
           class="uil uil-comment-dots"
-          onclick="openCommentPopup('{{ post.id }}')"></i>
+          onclick="openCommentPopup('{{ post.id }}',)"></i>
       </span>
-      <!--share arrow-->
-      <span><i class="uil uil-share-alt"></i></span>
+
+      <!-- Share Button -->
+      <span title="Share">
+        <i class="uil uil-share-alt"></i>
+      </span>
     </div>
+
+    <!-- Bookmark Button -->
     <div class="bookmark">
       <span onclick="toggleBookmark('{{ post.id }}', this)">
         <i
@@ -102,7 +110,7 @@
     </style>
   </div>
 
-  <!-- Placeholder for likes -->
+  <!-- Like Section -->
   <div
     class="like-section"
     id="liked-by-{{ post.id }}"
@@ -126,11 +134,8 @@
   </div>
 </div>
 
-<!-- Modal Structure feed for comment  -->
-<div
-  class="feed-modal"
-  id="commentModal-{{ post.id }}"
-  onclick="closeCommentPopup('{{ post.id }}')">
+<!-- COMMENT MODAL -->
+<div class="feed-modal" id="commentModal-{{ post.id }}">
   <div class="modal-content" onclick="event.stopPropagation()">
     <span class="modal-close-btn" onclick="closeCommentPopup('{{ post.id }}')"
       >&times;</span
@@ -147,8 +152,8 @@
           <h3>{{ post.user.username }}</h3>
           <small
             class="post-time"
-            data-created-at="{{ post.created_at|date:'c' }}"
-            >{{ post.created_at|timesince }} ago
+            data-created-at="{{ post.created_at|date:'c' }}">
+            {{ post.created_at|timesince }} ago
           </small>
           |
           <small>{{ post.user.profile.location }}</small>
@@ -156,9 +161,9 @@
       </div>
     </div>
 
-    <!-- Main Content Area -->
+    <!-- Modal Feed Content -->
     <div class="modal-feed">
-      <!-- Left Side - Image -->
+      <!-- Left Image -->
       <div class="modal-large-photo">
         {% if post.image %}
         <div class="modal-image-slider">
@@ -176,11 +181,9 @@
         <div class="slide-dots"></div>
       </div>
 
-      <!-- Right Side - Comments -->
+      <!-- Right Comment Section -->
       <div class="modal-comments-section">
         <h4>Comments</h4>
-
-        <!-- Comments List -->
         <div class="modal-all-comments">
           {% for comment in post.comments.all %}
           <div class="modal-comment">
@@ -198,7 +201,7 @@
           {% endfor %}
         </div>
 
-        <!-- Fixed Comment Input -->
+        <!-- Comment Input -->
         <form
           method="POST"
           action="{% url 'add_comment' post.id %}"
@@ -222,29 +225,5 @@
     </div>
   </div>
 </div>
-<script>
-  function toggleBookmark(postId, elem) {
-    fetch("{% url 'toggle_bookmark' %}", {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': '{{ csrf_token }}',
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `post_id=${postId}`,
-    })
-    .then(response => response.json())
-    .then(data => {
-      const icon = elem.querySelector("i");
-      icon.classList.add("animate");
 
-      if (data.status === "added") {
-        icon.classList.add("bookmarked");
-      } else {
-        icon.classList.remove("bookmarked");
-      }
-
-      // Remove animation after short delay
-      setTimeout(() => icon.classList.remove("animate"), 200);
-    });
-  }
-</script>
+<!-- JavaScript for Bookmark -->

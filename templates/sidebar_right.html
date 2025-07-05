@@ -1,0 +1,288 @@
+{% load static %}
+<div class="right">
+  <!------- MESSAGES ------->
+  <!-- Message Notifications Icon -->
+
+  <!-- Message Button (Floating Bottom Right) -->
+  <div id="message-float-button" class="menu-item">
+    <i class="uil uil-envelope-alt">
+      <small class="notification-count">6</small>
+    </i>
+    <h3>Messages</h3>
+  </div>
+
+  <div id="chat-section" class="chat-popup hidden">
+    <div class="messages">
+      <div class="heading">
+        <h4>Messages</h4>
+        <i class="uil uil-edit"></i>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <i class="uil uil-search"></i>
+        <input
+          type="search"
+          placeholder="Search messages"
+          id="message-search" />
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="category">
+        <h6 class="active">Primary</h6>
+        <h6>General</h6>
+        <h6 class="message-requests">Requests (7)</h6>
+      </div>
+
+      <!-- Message List -->
+      <div class="message-list" id="message-list-container">
+        {% include 'partials/message_list.html' %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Box Container (When a message is clicked) -->
+
+  <!-- Popup: Chat Window (Initially Hidden) -->
+  <div id="chat-popup" class="chat-popup hidden"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const chatSection = document.getElementById("chat-section");
+      const chatPopup = document.getElementById("chat-popup");
+
+      // Toggle chat section
+      document
+        .getElementById("message-float-button")
+        .addEventListener("click", () => {
+          chatSection.classList.toggle("hidden");
+          chatPopup.classList.add("hidden");
+        });
+
+      // Message list click (event delegation)
+      const messageList = document.getElementById("message-list-container");
+      if (messageList) {
+        messageList.addEventListener("click", function (e) {
+          const messageEl = e.target.closest(".message");
+          if (messageEl) {
+            const receiverId = messageEl.dataset.userId;
+            fetch(`/chat/${receiverId}/`)
+              .then((res) => res.text())
+              .then((html) => {
+                chatPopup.innerHTML = html;
+                chatPopup.classList.remove("hidden");
+                chatSection.classList.add("hidden");
+
+                // Reload chat.js
+                const oldScript = document.querySelector(
+                  "script[data-chat-script]"
+                );
+                if (oldScript) oldScript.remove();
+                const newScript = document.createElement("script");
+                newScript.src = "{% static 'assets/js/chat.js' %}";
+                newScript.setAttribute("data-chat-script", "true");
+                document.body.appendChild(newScript);
+              });
+          }
+        });
+      }
+
+      // Click outside to close
+      document.addEventListener("click", (e) => {
+        if (
+          !chatSection.contains(e.target) &&
+          !e.target.closest("#message-float-button")
+        ) {
+          chatSection.classList.add("hidden");
+        }
+        if (!chatPopup.contains(e.target)) {
+          chatPopup.classList.add("hidden");
+        }
+      });
+    });
+  </script>
+
+  <!------- END OF MESSAGES ------->
+  <script>
+    // Toggle Message List Popup
+    document
+      .getElementById("messages-notifications")
+      .addEventListener("click", () => {
+        const chatSection = document.getElementById("chat-section");
+        chatSection.classList.toggle("hidden");
+
+        // Optional: hide chat popup when opening message list
+        document.getElementById("chat-popup").classList.add("hidden");
+      });
+
+    // When a user clicks a message -> load chat dynamically into chat-popup
+    document.querySelectorAll(".message").forEach((el) => {
+      el.addEventListener("click", function () {
+        const receiverId = this.dataset.userId;
+
+        fetch(`/chat/${receiverId}/`)
+          .then((res) => res.text())
+          .then((html) => {
+            const chatPopup = document.getElementById("chat-popup");
+            chatPopup.innerHTML = html;
+            chatPopup.classList.remove("hidden");
+
+            // Hide message list popup
+            document.getElementById("chat-section").classList.add("hidden");
+
+            // Remove old chat.js if exists
+            const oldScript = document.querySelector(
+              "script[data-chat-script]"
+            );
+            if (oldScript) oldScript.remove();
+
+            // Inject chat.js script
+            const script = document.createElement("script");
+            script.src = "{% static 'assets/js/chat.js' %}";
+            script.setAttribute("data-chat-script", "true");
+            document.body.appendChild(script);
+          })
+          .catch((err) => console.error("Failed to load chat:", err));
+      });
+    });
+  </script>
+
+  <!------- FRIEND REQUEST ------->
+  <div class="friend-requests">
+    <h4>Requests</h4>
+    <!--request #-->
+    <div class="request" data-request-id="{{ request.id }}">
+      <div class="info">
+        <div class="profile-photo">
+          <img src="{%static 'assets/images/profile-20.jpg'%}" />
+        </div>
+        <div>
+          <h5>Hajia Bintu</h5>
+          <p class="text-muted">8 mutual friends</p>
+        </div>
+      </div>
+      <div class="action">
+        <button class="btn btn-primary">Accept</button>
+        <button class="btn">Decline</button>
+      </div>
+    </div>
+    <!--request #-->
+    <div class="request">
+      <div class="info">
+        <div class="profile-photo">
+          <img src="{%static 'assets/images/profile-5.jpg'%}" />
+        </div>
+        <div>
+          <h5>Hajia Bintu</h5>
+          <p class="text-muted">8 mutual friends</p>
+        </div>
+      </div>
+      <div class="action">
+        <button class="btn btn-primary">Accept</button>
+        <button class="btn">Decline</button>
+      </div>
+    </div>
+    <!--request #-->
+    <div class="request">
+      <div class="info">
+        <div class="profile-photo">
+          <img src="{%static 'assets/images/profile-2.jpg'%}" />
+        </div>
+        <div>
+          <h5>Hajia Bintu</h5>
+          <p class="text-muted">8 mutual friends</p>
+        </div>
+      </div>
+      <div class="action">
+        <button class="btn btn-primary">Accept</button>
+        <button class="btn">Decline</button>
+      </div>
+    </div>
+    <!--request #-->
+    <div class="request" data-request-id="{{ request.id }}">
+      <div class="info">
+        <div class="profile-photo">
+          <img src="{%static 'assets/images/profile-15.jpg'%}" />
+        </div>
+        <div>
+          <h5>Hajia Bintu</h5>
+          <p class="text-muted">8 mutual friends</p>
+        </div>
+      </div>
+      <div class="action">
+        <button class="btn btn-primary">Accept</button>
+        <button class="btn">Decline</button>
+      </div>
+    </div>
+    <!--request #-->
+    <div class="request">
+      <div class="info">
+        <div class="profile-photo">
+          <img src="{%static 'assets/images/profile-17.jpg'%}" />
+        </div>
+        <div>
+          <h5>Hajia Bintu</h5>
+          <p class="text-muted">8 mutual friends</p>
+        </div>
+      </div>
+      <div class="action">
+        <button class="btn btn-primary">Accept</button>
+        <button class="btn">Decline</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Accept or decline friend request
+    document.querySelectorAll(".request").forEach((request) => {
+      const acceptBtn = request.querySelector(".btn-primary");
+      const declineBtn = request.querySelector(".btn:not(.btn-primary)");
+      const requestId = request.dataset.requestId;
+
+      acceptBtn?.addEventListener("click", () => {
+        fetch(`/friend-request/respond/${requestId}/`, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: "action=accept",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "accepted") request.remove();
+          });
+      });
+
+      declineBtn?.addEventListener("click", () => {
+        fetch(`/friend-request/respond/${requestId}/`, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: "action=decline",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "declined") request.remove();
+          });
+      });
+    });
+
+    // CSRF helper
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === name + "=") {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  </script>
+</div>

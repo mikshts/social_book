@@ -9,11 +9,18 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('settings/', profile_view, name='profile'),
     path('chat/<int:receiver_id>/', chat_view, name='chat'),
-    #survey
+    path('recent-messages/', views.recent_messages, name='recent_messages'),
+
+        # Survey
     path('survey/', views.survey, name='survey'),
     path('toggle_bookmark/', views.toggle_bookmark, name='toggle_bookmark'),
     path('bookmarks/', views.bookmark_list, name='bookmarks'),
-    
+    # friend requests
+    path('friend-request/send/<int:user_id>/', views.send_friend_request, name='send_friend_request'),
+    path('friend-request/respond/<int:request_id>/', views.respond_friend_request, name='respond_friend_request'),
+    # Messaging
+
+        
 
 
     # auth
