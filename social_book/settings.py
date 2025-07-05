@@ -56,13 +56,23 @@ WSGI_APPLICATION = 'social_book.wsgi.application'
 ASGI_APPLICATION = 'social_book.asgi.application'
 
 # DATABASE
-DATABASES = {
-    'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR}/db.sqlite3',
-        conn_max_age=600,
-        ssl_require=not DEBUG
-    )
-}
+if DEBUG:
+    # Use SQLite locally
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    # Use PostgreSQL on Render
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+
 
 # CHANNELS (Redis)
 REDIS_URL = os.environ.get("REDIS_URL", "redis://127.0.0.1:6379")
