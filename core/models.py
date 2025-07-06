@@ -6,6 +6,9 @@ import uuid
 # ---------------------------
 # Profile
 # ---------------------------
+# ---------------------------
+# Profile
+# ---------------------------
 class Profile(models.Model):
     RELATIONSHIP_CHOICES = [
         ('single', 'Single'),
@@ -26,7 +29,10 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     profileimg = models.ImageField(
         upload_to='profile_images/',
-        default='https://res.cloudinary.com/.../blank_profile_picture.png',
+        # REMOVE THE DEFAULT CLOUDINARY URL
+        # Set blank=True and null=True instead
+        blank=True,
+        null=True,
         max_length=500
     )
     location = models.CharField(max_length=100, blank=True)
@@ -53,8 +59,6 @@ class Profile(models.Model):
                 return True
             return False
         return self.is_active
-
-
 # ---------------------------
 # Post, Like, Comment, Bookmark
 # ---------------------------
