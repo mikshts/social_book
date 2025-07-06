@@ -1,3 +1,5 @@
+# File: social_book/social_book/settings.py
+
 from pathlib import Path
 import os
 import dj_database_url

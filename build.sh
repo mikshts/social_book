@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/social_book/bash.sh
 # Install dependencies
 pip install -r requirements.txt
 
@@ -10,3 +9,4 @@ python manage.py migrate --noinput
 python manage.py collectstatic --noinput
 
 echo "Using database: $DATABASE_URL"
+

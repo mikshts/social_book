@@ -3,19 +3,29 @@ services:
     name: social-book-redis
     ipAllowList: []
 
+databases:
+  - name: perfectmatch-db
+    databaseName: perfectmatch_db_fzvv
+    user: perfectmatch_db_fzvv_user
+
+services:
   - type: web
     name: PerfectMatch
     env: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "daphne social_book.asgi:application"
+    startCommand: "daphne -b 0.0.0.0 -p $PORT social_book.asgi:application"
     preDeployCommand: |
       python manage.py migrate --noinput
       python manage.py collectstatic --noinput
     envVars:
       - key: DEBUG
-        value: False
+        value: "False"
       - key: SECRET_KEY
-        value: django-insecure-y0ur$uperSecr3tKey1234567890
+        value: "django-insecure-y0ur$uperSecr3tKey1234567890"
+      - key: ALLOWED_HOSTS
+        value: "perfectmatch-0uig.onrender.com,127.0.0.1,localhost"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://perfectmatch-0uig.onrender.com"
       - key: REDIS_URL
         fromService:
           type: redis

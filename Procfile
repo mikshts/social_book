@@ -1,1 +1,1 @@
-web: daphne social_book.asgi:application
+web: python run_daphne.py
