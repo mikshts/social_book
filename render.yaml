@@ -1,8 +1,3 @@
-services:
-  - type: redis
-    name: social-book-redis
-    ipAllowList: []
-
 databases:
   - name: perfectmatch-db
     databaseName: perfectmatch_db_fzvv
@@ -27,10 +22,7 @@ services:
       - key: CSRF_TRUSTED_ORIGINS
         value: "https://perfectmatch-0uig.onrender.com"
       - key: REDIS_URL
-        fromService:
-          type: redis
-          name: social-book-redis
-          property: connectionString
+        value: "rediss://default:AbK9AAIjcDE3NjY3Y2M0N2I0NjY0OTgyYTljNTQ4ZDExMjZhMDJkM3AxMA@nearby-crow-45757.upstash.io:6379"
       - key: DATABASE_URL
         fromDatabase:
           name: perfectmatch-db
