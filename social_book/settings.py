@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'core.apps.CoreConfig',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -106,8 +108,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # MEDIA
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # DEFAULT FIELD
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -123,3 +124,12 @@ CSRF_TRUSTED_ORIGINS = os.environ.get(
     "CSRF_TRUSTED_ORIGINS",
     "https://perfectmatch-0uig.onrender.com"
 ).split(",")
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': '8t-1T4p26-GMGH5JDUa5Mg-8suQ',
+    'API_KEY': '817192711611655',
+    'API_SECRET': '8t-1T4p26-GMGH5JDUa5Mg-8suQ',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
