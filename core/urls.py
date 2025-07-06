@@ -25,8 +25,6 @@ urlpatterns = [
     path('run-migrations/', run_migrations),
 
 
-
-
     # auth
     path('signin/', views.signin, name='signin'),
     path('signup/', views.signup, name='signup'),

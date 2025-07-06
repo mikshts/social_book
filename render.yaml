@@ -14,8 +14,8 @@ services:
       python manage.py collectstatic --noinput
       echo "from django.contrib.auth import get_user_model; \
       User = get_user_model(); \
-      User.objects.filter(username='admin').exists() or \
-      User.objects.create_superuser('admin', 'admin@example.com', 'SuperSecure123')" \
+      User.objects.filter(username='lolamo').exists() or \
+      User.objects.create_superuser('lolamo', 'lolamo@example.com', 'lolamo1231123')" \
       | python manage.py shell
     envVars:
       - key: DEBUG
