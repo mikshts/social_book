@@ -20,9 +20,7 @@
     <div class="profile-photo">
       <a href="{%url 'profile' %}"
         ><div class="profile-photo">
-          <img
-            src="{{ user.profile.profileimg.url|default:'/static/blank_profile_picture.png' }}"
-            alt="Profile" /></div
+          <img src="{% if post.user.profile.profileimg %}{{ post.user.profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}" alt="Profile" /></div
       ></a>
     </div>
   </div>
