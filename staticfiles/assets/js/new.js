@@ -331,8 +331,8 @@ document.addEventListener("DOMContentLoaded", function () {
 //for posting in feed --------------------------------
 const postsSocket = new WebSocket(
   (window.location.protocol === "https:" ? "wss://" : "ws://") +
-  window.location.host +
-  "/ws/posts_feed/"
+    window.location.host +
+    "/ws/posts_feed/"
 );
 
 postsSocket.onmessage = function (e) {
@@ -509,135 +509,122 @@ window.addEventListener("beforeunload", () => {
   });
 });
 
-// --------------------------------------------
-// POST FEED WebSocket - Handles new & deleted posts
-// --------------------------------------------
+// --- WebSocket protocol helper ---
+function getWebSocketProtocol() {
+  return window.location.protocol === "https:" ? "wss" : "ws";
+}
+
+// --- Post Feed WebSocket ---
 let postFeedSocket = null;
+const postFeedUrl = `${getWebSocketProtocol()}://${
+  window.location.host
+}/ws/posts_feed/`;
 
+function initializePostFeedSocket() {
+  if (postFeedSocket && postFeedSocket.readyState === WebSocket.OPEN) return;
+  postFeedSocket = new WebSocket(postFeedUrl);
+
+  postFeedSocket.onopen = () => {
+    // Production: Remove debug logs if desired
+    // console.log("✅ Post feed socket connected.");
+  };
+
+  postFeedSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+
+    if (data.action === "new_post") {
+      const feed = document.getElementById("posts-list");
+      if (feed) {
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = data.html;
+        const newPostElement = tempDiv.firstElementChild;
+        const postId = newPostElement?.id;
+        if (!document.getElementById(postId)) {
+          feed.insertAdjacentElement("afterbegin", newPostElement);
+          // Attach like socket and comment modal logic for new post
+          const newPostId = postId?.replace("post-", "");
+          if (newPostId) {
+            initLikeSocketForNewPost(newPostId);
+          }
+          initializePostButtons(newPostElement);
+        }
+      }
+    }
+
+    if (data.action === "delete_post") {
+      const postElement = document.getElementById(`post-${data.post_id}`);
+      if (postElement) {
+        postElement.remove();
+      }
+    }
+  };
+
+  postFeedSocket.onclose = (e) => {
+    // Optionally reconnect logic here for production
+    // console.warn(`⚠️ Post feed socket closed. Code: ${e.code}, Reason: ${e.reason}`);
+  };
+
+  postFeedSocket.onerror = (e) => {
+    // console.error("🔥 Post feed socket error:", e);
+  };
+}
+initializePostFeedSocket();
+
+// --- Like System WebSockets ---
+const likeSockets = {};
+
+function initLikeSocketForNewPost(postId) {
+  if (likeSockets[postId]) return;
+  const protocol = getWebSocketProtocol();
+  const socket = new WebSocket(
+    `${protocol}://${window.location.host}/ws/like/${postId}/`
+  );
+  likeSockets[postId] = socket;
+
+  socket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    const likeSectionToUpdate = document.getElementById(
+      `liked-by-${data.post_id}`
+    );
+    if (likeSectionToUpdate) {
+      let newContent = "";
+      if (data.recent_likers && data.recent_likers.length > 0) {
+        newContent += '<div class="like-section-content">';
+        newContent += "<span>Liked by</span>";
+        newContent += '<div class="like-section-users">';
+        data.recent_likers.forEach((user) => {
+          newContent += `<img src="${user.profile_img}" alt="${user.username}" />`;
+        });
+        newContent += "</div>";
+        newContent += `<span>and</span><span id="like-count-${data.post_id}">${data.likes_count}</span><span>others</span>`;
+        newContent += "</div>";
+      } else {
+        newContent += `<div class="like-section-content"><span id="like-count-${data.post_id}">${data.likes_count}</span> likes</div>`;
+      }
+      likeSectionToUpdate.innerHTML = newContent;
+      const heartBtnIcon = document
+        .getElementById(`like-btn-${data.post_id}`)
+        .querySelector("i");
+      if (heartBtnIcon && data.is_liked_by_current_user !== undefined) {
+        heartBtnIcon.classList.toggle("liked", data.is_liked_by_current_user);
+      }
+    }
+  };
+
+  socket.onopen = () => {};
+  socket.onclose = () => {};
+  socket.onerror = () => {};
+}
+
+// Initialize like sockets for all posts on page load
 document.addEventListener("DOMContentLoaded", function () {
-  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-  const socketUrl = `${protocol}://${window.location.host}`;
-
-  if (!postFeedSocket || postFeedSocket.readyState !== WebSocket.OPEN) {
-    postFeedSocket = new WebSocket(socketUrl);
-
-    postFeedSocket.onopen = () => console.log("✅ Post feed socket connected.");
-
-    postFeedSocket.onmessage = function (e) {
-      const data = JSON.parse(e.data);
-      console.log("WS message received:", data);
-
-      // ✅ FIX 1: Prevent duplicate posts + attach like socket for new posts
-      if (data.action === "new_post") {
-        const feed = document.getElementById("posts-list");
-        if (feed) {
-          const tempDiv = document.createElement("div");
-          tempDiv.innerHTML = data.html;
-
-          const newPostElement = tempDiv.firstElementChild;
-
-          const postId = newPostElement?.id;
-          if (!document.getElementById(postId)) {
-            feed.insertAdjacentElement("afterbegin", newPostElement);
-
-            // ✅ Add like socket
-            const newPostId = postId?.replace("post-", "");
-            if (newPostId) {
-              initLikeSocketForNewPost(newPostId);
-            }
-
-            // ✅ ✅ ✅ ADD THIS — ensure buttons in the new post work
-            initializePostButtons(newPostElement);
-          }
-        }
-      }
-      // This goes AFTER your existing like button delegated listener on #posts-list
-      document
-        .getElementById("posts-list")
-        .addEventListener("click", function (e) {
-          const commentBtn = e.target.closest(".comment-btn");
-          if (commentBtn) {
-            const postId = commentBtn.dataset.postId;
-            const modal = document.getElementById(`commentModal-${postId}`);
-            if (modal) {
-              modal.style.display = "flex";
-              document.body.style.overflow = "hidden";
-            }
-          }
-        });
-
-      function closeCommentPopup(postId) {
-        const modal = document.getElementById(`commentModal-${postId}`);
-        if (modal) {
-          modal.style.display = "none";
-          document.body.style.overflow = "";
-        }
-      }
-      function openCommentPopup(postId) {
-        const modal = document.getElementById(`commentModal-${postId}`);
-        if (modal) {
-          modal.style.display = "flex";
-          document.body.style.overflow = "hidden";
-        }
-      }
-
-      function initializePostButtons(postElement) {
-        const postId = postElement.id.replace("post-", "");
-
-        // ✅ Add event listener for comment button
-        const commentBtn = postElement.querySelector(".comment-btn");
-        const commentModal = document.getElementById(`comment-modal-${postId}`);
-
-        if (commentBtn && commentModal) {
-          commentBtn.addEventListener("click", () => {
-            commentModal.style.display = "flex";
-            document.body.style.overflow = "hidden";
-          });
-        }
-
-        // ✅ Close button inside modal
-        const closeBtn = commentModal?.querySelector(".close-comment-modal");
-        if (closeBtn) {
-          closeBtn.addEventListener("click", () => {
-            commentModal.style.display = "none";
-            document.body.style.overflow = "";
-          });
-        }
-
-        // ✅ Close modal when clicking outside the inner box
-        commentModal?.addEventListener("click", (e) => {
-          if (e.target === commentModal) {
-            commentModal.style.display = "none";
-            document.body.style.overflow = "";
-          }
-        });
-      }
-
-      if (data.action === "delete_post") {
-        console.log("Deleting post with ID:", data.post_id);
-        const postElement = document.getElementById(`post-${data.post_id}`);
-        if (postElement) {
-          postElement.remove();
-        } else {
-          console.warn(
-            "Post element to delete not found for ID:",
-            data.post_id
-          );
-        }
-      }
-    };
-
-    postFeedSocket.onclose = (e) =>
-      console.warn(
-        `⚠️ Post feed socket closed. Code: ${e.code}, Reason: ${e.reason}`
-      );
-
-    postFeedSocket.onerror = (e) =>
-      console.error("🔥 Post feed socket error:", e);
-  }
+  document.querySelectorAll(".like-section").forEach((section) => {
+    const postId = section.getAttribute("data-post-id");
+    initLikeSocketForNewPost(postId);
+  });
 });
 
-// ✅ Gracefully close socket on page unload
+// --- Like Button Handler ---
 document.getElementById("posts-list").addEventListener("click", function (e) {
   const likeBtn = e.target.closest(".like-btn");
   if (likeBtn) {
@@ -648,42 +635,84 @@ document.getElementById("posts-list").addEventListener("click", function (e) {
   }
 });
 
-// --------------------------------------------
-// Delete post handler using WebSocket sync
-// --------------------------------------------
-function deletePost(postId) {
-  if (!confirm("Are you sure you want to delete this post?")) return;
-
-  fetch(`/post/${postId}/delete/`, {
-    method: "POST",
-    headers: { "X-CSRFToken": getCSRFToken() },
-  })
-    .then((res) => res.json())
+function toggleLike(postId) {
+  fetch(`/like/${postId}/`)
+    .then((response) => response.json())
     .then((data) => {
-      if (data.status === "success") {
-        if (postFeedSocket && postFeedSocket.readyState === WebSocket.OPEN) {
-          postFeedSocket.send(
-            JSON.stringify({
-              action: "delete_post",
-              post_id: data.post_id,
-              username: data.username,
-            })
-          );
-        }
-      } else {
-        alert(data.message);
-      }
+      const heartBtn = document
+        .getElementById(`like-btn-${postId}`)
+        .querySelector("i");
+      heartBtn.classList.toggle("liked", data.status === "liked");
     })
-    .catch(() => alert("Error deleting post."));
+    .catch(() => {});
 }
 
-// Real-time time ago update
+// --- Post Creation Handler ---
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("create-post-form");
+  if (!form) return;
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const postUrl = form.getAttribute("data-url");
+    fetch(postUrl, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+          .value,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "success") {
+          location.reload(); // Production: reload to show new post/comments/likes
+        }
+      });
+  });
+});
+
+// --- Modal and Popup Logic (unchanged, but ensure only one event per element) ---
+function openMyCustomModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.style.display = "flex";
+}
+function closeMyCustomModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.style.display = "none";
+}
+window.onclick = function (event) {
+  if (event.target.classList.contains("my-custom-modal")) {
+    event.target.style.display = "none";
+  }
+};
+
+// --- Cleanup: Close all sockets on unload ---
+window.addEventListener("beforeunload", () => {
+  if (postFeedSocket && postFeedSocket.readyState === WebSocket.OPEN) {
+    postFeedSocket.close();
+  }
+  Object.values(likeSockets).forEach((socket) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.close();
+    }
+  });
+});
+
+// --- Utility: CSRF Token ---
+function getCSRFToken() {
+  const cookie = document.cookie
+    .split(";")
+    .find((c) => c.trim().startsWith("csrftoken="));
+  return cookie ? cookie.split("=")[1] : "";
+}
+
+// --- Time Ago Update ---
 function updateTimeSince() {
   document.querySelectorAll(".post-time").forEach((el) => {
     const createdAt = new Date(el.dataset.createdAt);
     const now = new Date();
     const seconds = Math.floor((now - createdAt) / 1000);
-
     let timeString = "";
     if (seconds < 60) {
       timeString = `${seconds}s ago`;
@@ -694,19 +723,8 @@ function updateTimeSince() {
     } else {
       timeString = `${Math.floor(seconds / 86400)}d ago`;
     }
-
     el.textContent = timeString;
   });
 }
-
 setInterval(updateTimeSince, 60000);
 updateTimeSince();
-
-// Utility to get CSRF token from cookie
-function getCSRFToken() {
-  const cookie = document.cookie
-    .split(";")
-    .find((c) => c.trim().startsWith("csrftoken="));
-  return cookie ? cookie.split("=")[1] : "";
-}
-//end of post feed  deletion realtime-------
