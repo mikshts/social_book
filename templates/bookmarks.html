@@ -58,9 +58,7 @@
               <div class="profile-photo">
                 <a
                   href="{% url 'public_profile' bookmark.post.user.username %}">
-                  <img
-                    src="{{ bookmark.post.user.profile.profileimg.url|default:'/static/blank_profile_picture.png' }}"
-                    alt="{{ bookmark.post.user.username }}"
+                  <img src="{% if bookmark.post.user.profile.profileimg %}{{ bookmark.post.user.profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}"   alt="{{ bookmark.post.user.username }}"
                     style="width: 40px; height: 40px; border-radius: 50%" />
                 </a>
               </div>

@@ -80,9 +80,7 @@
                   no-repeat center center/cover;
               ">
               <div class="profile-photo">
-                <img
-                  src="{{ user.profile.profileimg.url|default:'/static/blank_profile_picture.png' }}"
-                  alt="Profile" />
+                <img src="{% if post.user.profile.profileimg %}{{ post.user.profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}" alt="Profile" />
               </div>
               <p class="name">Your Story</p>
             </div>
@@ -249,9 +247,7 @@
           <!-- Trigger Section -->
           <div class="dating-create-post-trigger" id="dating-open-modal">
             <div class="profile-photo">
-              <img
-                src="{{ user.profile.profileimg.url|default:'/static/blank_profile_picture.png' }}"
-                alt="Profile" />
+              <img src="{% if post.user.profile.profileimg %}{{ post.user.profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}" alt="Profile" />
             </div>
 
             <div class="post-input-wrapper">
