@@ -3,6 +3,8 @@
 from pathlib import Path
 import os
 import dj_database_url
+# import cloudinary # Already imported by cloudinary_storage, but no harm in explicit import
+# import cloudinary_storage # Already imported implicitly by DEFAULT_FILE_STORAGE, no harm in explicit import
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,9 +23,26 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    'core.apps.CoreConfig', # Your app
+    'cloudinary', # Keep this here
+    'cloudinary_storage', # Keep this here, but remember the order rule
+]
+
+# CRITICAL CHANGE 1: Correct INSTALLED_APPS order for Cloudinary
+# 'cloudinary_storage' MUST come BEFORE 'django.contrib.staticfiles'
+# 'cloudinary' can be anywhere, but typically near cloudinary_storage
+INSTALLED_APPS = [
+    'daphne',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'cloudinary_storage', # MOVED UP
+    'django.contrib.staticfiles', # MOVED DOWN
+    'channels',
     'core.apps.CoreConfig',
-    'cloudinary',
-    'cloudinary_storage',
+    'cloudinary', # Good position
 ]
 
 
@@ -76,9 +95,26 @@ else:
     }
 
 
-# Cloudinary (simplified)
-CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# CRITICAL CHANGE 2: Cloudinary authentication
+# You are using CLOUDINARY_URL, which is fine, but it combines all credentials.
+# However, if you explicitly set CLOUDINARY_CLOUD_NAME, API_KEY, API_SECRET,
+# those will override the CLOUDINARY_URL for individual components.
+# It's usually best to stick to one method. If you use CLOUDINARY_URL, make sure it's correct.
+# If you prefer separate variables, then use those.
+
+# Let's assume you're using CLOUDINARY_URL for simplicity as you have it.
+# The important part is that this environment variable MUST BE CORRECTLY SET ON RENDER.
+CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL') # This loads the full URL from Render env var
+
+# If you prefer separate variables (which gives more control and can be easier to debug):
+# import cloudinary # Make sure this is imported at the top
+# cloudinary.config(
+#     cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+#     api_key=os.environ.get('CLOUDINARY_API_KEY'),
+#     api_secret=os.environ.get('CLOUDINARY_API_SECRET')
+# )
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' # GOOD, this is correct.
 
 # CHANNELS (Redis)
 REDIS_URL = os.environ.get("REDIS_URL")
@@ -91,9 +127,11 @@ CHANNEL_LAYERS = {
     },
 }
 
-print("Redis:", REDIS_URL)
-print("Cloudinary:", CLOUDINARY_URL)
-
+# These print statements are helpful for debugging on Render logs
+print("DEBUG:", DEBUG) # Add this to see if DEBUG is True/False
+print("ALLOWED_HOSTS:", ALLOWED_HOSTS) # Add this
+print("Redis URL:", REDIS_URL) # Keep this
+print("Cloudinary URL:", CLOUDINARY_URL) # Keep this
 
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
@@ -115,8 +153,11 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# MEDIA
-
+# MEDIA - GOOD. You don't explicitly need MEDIA_URL/ROOT to serve from Cloudinary,
+# but Django still uses them internally, e.g., for admin uploads before default storage takes over.
+# It's fine to leave them implied or uncomment them if you had them before.
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media' # This is good practice to define where media *would* go locally.
 
 # DEFAULT FIELD
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -130,6 +171,5 @@ if not DEBUG:
 
 CSRF_TRUSTED_ORIGINS = os.environ.get(
     "CSRF_TRUSTED_ORIGINS",
-    "https://perfectmatch-0uig.onrender.com"
+    "https://perfectmatch-0uig.onrender.com" # Ensure this is your actual Render URL
 ).split(",")
-
