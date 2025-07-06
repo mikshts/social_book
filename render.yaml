@@ -27,3 +27,5 @@ services:
         fromDatabase:
           name: perfectmatch-db
           property: connectionString
+      - key: CLOUDINARY_URL
+        value: "cloudinary://817192711611655:8t-1T4p26-GMGH5JDUa5Mg-8suQ@dwakgnjvw"
