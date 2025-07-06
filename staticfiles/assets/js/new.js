@@ -330,7 +330,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 //for posting in feed --------------------------------
 const postsSocket = new WebSocket(
-  "ws://" + window.location.host + "/ws/posts_feed/"
+  (window.location.protocol === "https:" ? "wss://" : "ws://") +
+  window.location.host +
+  "/ws/posts_feed/"
 );
 
 postsSocket.onmessage = function (e) {
@@ -514,7 +516,7 @@ let postFeedSocket = null;
 
 document.addEventListener("DOMContentLoaded", function () {
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-  const socketUrl = `${protocol}://${window.location.host}/ws/posts_feed/`;
+  const socketUrl = `${protocol}://${window.location.host}`;
 
   if (!postFeedSocket || postFeedSocket.readyState !== WebSocket.OPEN) {
     postFeedSocket = new WebSocket(socketUrl);

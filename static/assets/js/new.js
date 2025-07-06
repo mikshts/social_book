@@ -328,10 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
     subscriptionPopupActive = false;
   }
 });
-//for posting in feed --------------------------------
-const postsSocket = new WebSocket(
-  "ws://" + window.location.host + "/ws/posts_feed/"
-);
+
 
 postsSocket.onmessage = function (e) {
   const data = JSON.parse(e.data);
