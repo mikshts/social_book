@@ -1,12 +1,11 @@
-# myapp/models.py
 from django.db import models
-from django.contrib.auth.models import User # Or get_user_model(), both are fine here
+from django.contrib.auth.models import User
 from django.utils import timezone
 import uuid
 
-# Define your User model alias once at the top if you prefer get_user_model()
-# User = get_user_model() # Uncomment and use this if you want more flexibility with custom User models
-
+# ---------------------------
+# Profile
+# ---------------------------
 class Profile(models.Model):
     RELATIONSHIP_CHOICES = [
         ('single', 'Single'),
@@ -26,9 +25,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
     profileimg = models.ImageField(
-    upload_to='profile_images/',
-    default='https://res.cloudinary.com/.../blank_profile_picture.png',
-    max_length=500  # or even 1000, just to be safe
+        upload_to='profile_images/',
+        default='https://res.cloudinary.com/.../blank_profile_picture.png',
+        max_length=500
     )
     location = models.CharField(max_length=100, blank=True)
     age = models.PositiveIntegerField(null=True, blank=True)
@@ -41,7 +40,6 @@ class Profile(models.Model):
     deactivation_expiry = models.DateTimeField(null=True, blank=True)
     active_status_date = models.DateTimeField(null=True, blank=True)
     is_online = models.BooleanField(default=False)
-
 
     def __str__(self):
         return self.user.username
@@ -57,6 +55,9 @@ class Profile(models.Model):
         return self.is_active
 
 
+# ---------------------------
+# Post, Like, Comment, Bookmark
+# ---------------------------
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -84,65 +85,34 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.user.username}: {self.text[:30]}"
 
+
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     liked_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('post', 'user')  # Prevent duplicate likes
+        unique_together = ('post', 'user')
 
     def __str__(self):
-        return f"{self.user.username} liked '{self.post}'"
-    
-# ----------------------------------------------------
-# Keep only this single definition of AccountDeletionLog
-# ----------------------------------------------------
-class AccountDeletionLog(models.Model):
-    """
-    Model to log account deletion events.
-    Records who deleted an account and when.
-    """
-    deleted_account_username = models.CharField(
-        max_length=150,
-        help_text="Username of the account that was deleted."
-    )
-    deleted_by = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='account_deletion_records',
-        help_text="The user who performed the account deletion (will be null for self-deletion)."
-    )
-    deletion_timestamp = models.DateTimeField(
-        auto_now_add=True,
-        help_text="The date and time when the account was deleted."
-    )
-    reason = models.TextField(
-        blank=True,
-        null=True,
-        help_text="Optional reason provided for the account deletion."
-    )
+        return f"{self.user.username} liked {self.post}"
+
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookmarks')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Account Deletion Log"
-        verbose_name_plural = "Account Deletion Logs"
-        ordering = ['-deletion_timestamp']
+        unique_together = ('user', 'post')
 
     def __str__(self):
-        deleter_info = self.deleted_by.username if self.deleted_by else "Self-deleted / System"
-        return f"Account '{self.deleted_account_username}' deleted by '{deleter_info}' on {self.deletion_timestamp.strftime('%Y-%m-%d %H:%M:%S')}"
+        return f"{self.user.username} bookmarked {self.post.id}"
 
-# ----------------------------------------------------
-# Keep only this single definition of Like
-# ----------------------------------------------------
 
-#chats
-
-from django.db import models
-from django.contrib.auth.models import User
-
+# ---------------------------
+# Messaging
+# ---------------------------
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
@@ -152,11 +122,29 @@ class Message(models.Model):
     class Meta:
         ordering = ['timestamp']
 
-#survey
-from django.db import models
-from django.contrib.auth.models import User
+    def __str__(self):
+        return f"{self.sender.username} → {self.receiver.username} ({self.timestamp.strftime('%H:%M')})"
 
 
+# ---------------------------
+# Friend Requests
+# ---------------------------
+class FriendRequest(models.Model):
+    from_user = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
+    is_accepted = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ('from_user', 'to_user')
+
+    def __str__(self):
+        return f"{self.from_user.username} → {self.to_user.username} ({'Accepted' if self.is_accepted else 'Pending'})"
+
+
+# ---------------------------
+# Survey
+# ---------------------------
 class UserSurvey(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="survey")
 
@@ -184,31 +172,31 @@ class UserSurvey(models.Model):
     def __str__(self):
         return f"Survey of {self.user.username}"
 
-#bookmarks---------------
-class Bookmark(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookmarks')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+
+# ---------------------------
+# Account Deletion Log
+# ---------------------------
+class AccountDeletionLog(models.Model):
+    deleted_account_username = models.CharField(
+        max_length=150,
+        help_text="Username of the account that was deleted."
+    )
+    deleted_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='account_deletion_records',
+        help_text="The user who performed the account deletion (null = self-deletion)."
+    )
+    deletion_timestamp = models.DateTimeField(auto_now_add=True)
+    reason = models.TextField(blank=True, null=True)
 
     class Meta:
-        unique_together = ('user', 'post')
+        verbose_name = "Account Deletion Log"
+        verbose_name_plural = "Account Deletion Logs"
+        ordering = ['-deletion_timestamp']
 
     def __str__(self):
-        return f"{self.user.username} bookmarked {self.post.id}"
-
-
-from django.db import models
-from django.contrib.auth.models import User
-from django.utils import timezone
-
-class FriendRequest(models.Model):
-    from_user = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
-    to_user = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
-    is_accepted = models.BooleanField(default=False)
-    timestamp = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        unique_together = ('from_user', 'to_user')
-
-    def __str__(self):
-        return f"{self.from_user.username} → {self.to_user.username} ({'Accepted' if self.is_accepted else 'Pending'})"
+        deleter_info = self.deleted_by.username if self.deleted_by else "Self-deleted / System"
+        return f"{self.deleted_account_username} deleted by {deleter_info} on {self.deletion_timestamp.strftime('%Y-%m-%d %H:%M:%S')}"
