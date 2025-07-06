@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
