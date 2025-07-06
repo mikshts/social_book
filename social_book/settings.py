@@ -76,9 +76,12 @@ else:
     }
 
 
+# Cloudinary (simplified)
+CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # CHANNELS (Redis)
-REDIS_URL = os.environ.get("REDIS_URL", "redis://127.0.0.1:6379")
+REDIS_URL = os.environ.get("REDIS_URL")
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -87,6 +90,10 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+print("Redis:", REDIS_URL)
+print("Cloudinary:", CLOUDINARY_URL)
+
 
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
@@ -126,11 +133,3 @@ CSRF_TRUSTED_ORIGINS = os.environ.get(
     "https://perfectmatch-0uig.onrender.com"
 ).split(",")
 
-
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': '8t-1T4p26-GMGH5JDUa5Mg-8suQ',
-    'API_KEY': '817192711611655',
-    'API_SECRET': '8t-1T4p26-GMGH5JDUa5Mg-8suQ',
-}
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
