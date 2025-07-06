@@ -26,8 +26,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
     profileimg = models.ImageField(
-        upload_to='profile_images/',
-        default='https://res.cloudinary.com/8t-1T4p26-GMGH5JDUa5Mg-8suQ/image/upload/v1234567890/blank_profile_picture.png'
+    upload_to='profile_images/',
+    default='https://res.cloudinary.com/.../blank_profile_picture.png',
+    max_length=500  # or even 1000, just to be safe
     )
     location = models.CharField(max_length=100, blank=True)
     age = models.PositiveIntegerField(null=True, blank=True)

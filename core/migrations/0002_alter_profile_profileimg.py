@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='profile',
             name='profileimg',
-            field=models.ImageField(default='https://res.cloudinary.com/8t-1T4p26-GMGH5JDUa5Mg-8suQ/image/upload/v1234567890/blank_profile_picture.png', upload_to='profile_images/'),
+            field=models.ImageField(default='https://res.cloudinary.com/8t-1T4p26-GMGH5JDUa5Mg-8suQ/image/upload/v1234567890/blank_profile_picture.png', max_length=500, upload_to='profile_images/'),
         ),
     ]
