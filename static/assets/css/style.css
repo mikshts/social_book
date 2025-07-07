@@ -1568,6 +1568,9 @@ main .container .left .profile {
   color: gold;
   transition: color 0.3s ease, transform 0.2s;
 }
+.comment-btn {
+  cursor: pointer;
+}
 
 .uil-bookmark-full {
   cursor: pointer;

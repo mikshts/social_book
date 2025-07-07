@@ -527,7 +527,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = JSON.parse(e.data);
       console.log("WS message received:", data);
 
-      // ✅ FIX 1: Prevent duplicate posts + attach like socket for new posts
       if (data.action === "new_post") {
         const feed = document.getElementById("posts-list");
         if (feed) {
@@ -535,82 +534,18 @@ document.addEventListener("DOMContentLoaded", function () {
           tempDiv.innerHTML = data.html;
 
           const newPostElement = tempDiv.firstElementChild;
-
           const postId = newPostElement?.id;
+          
           if (!document.getElementById(postId)) {
             feed.insertAdjacentElement("afterbegin", newPostElement);
 
-            // ✅ Add like socket
             const newPostId = postId?.replace("post-", "");
             if (newPostId) {
               initLikeSocketForNewPost(newPostId);
-            }
-
-            // ✅ ✅ ✅ ADD THIS — ensure buttons in the new post work
-            initializePostButtons(newPostElement);
-          }
-        }
-      }
-      // This goes AFTER your existing like button delegated listener on #posts-list
-      document
-        .getElementById("posts-list")
-        .addEventListener("click", function (e) {
-          const commentBtn = e.target.closest(".comment-btn");
-          if (commentBtn) {
-            const postId = commentBtn.dataset.postId;
-            const modal = document.getElementById(`commentModal-${postId}`);
-            if (modal) {
-              modal.style.display = "flex";
-              document.body.style.overflow = "hidden";
+              initializePostButtons(newPostElement);
             }
           }
-        });
-
-      function closeCommentPopup(postId) {
-        const modal = document.getElementById(`commentModal-${postId}`);
-        if (modal) {
-          modal.style.display = "none";
-          document.body.style.overflow = "";
         }
-      }
-      function openCommentPopup(postId) {
-        const modal = document.getElementById(`commentModal-${postId}`);
-        if (modal) {
-          modal.style.display = "flex";
-          document.body.style.overflow = "hidden";
-        }
-      }
-
-      function initializePostButtons(postElement) {
-        const postId = postElement.id.replace("post-", "");
-
-        // ✅ Add event listener for comment button
-        const commentBtn = postElement.querySelector(".comment-btn");
-        const commentModal = document.getElementById(`comment-modal-${postId}`);
-
-        if (commentBtn && commentModal) {
-          commentBtn.addEventListener("click", () => {
-            commentModal.style.display = "flex";
-            document.body.style.overflow = "hidden";
-          });
-        }
-
-        // ✅ Close button inside modal
-        const closeBtn = commentModal?.querySelector(".close-comment-modal");
-        if (closeBtn) {
-          closeBtn.addEventListener("click", () => {
-            commentModal.style.display = "none";
-            document.body.style.overflow = "";
-          });
-        }
-
-        // ✅ Close modal when clicking outside the inner box
-        commentModal?.addEventListener("click", (e) => {
-          if (e.target === commentModal) {
-            commentModal.style.display = "none";
-            document.body.style.overflow = "";
-          }
-        });
       }
 
       if (data.action === "delete_post") {
@@ -618,26 +553,76 @@ document.addEventListener("DOMContentLoaded", function () {
         const postElement = document.getElementById(`post-${data.post_id}`);
         if (postElement) {
           postElement.remove();
-        } else {
-          console.warn(
-            "Post element to delete not found for ID:",
-            data.post_id
-          );
         }
       }
     };
 
     postFeedSocket.onclose = (e) =>
-      console.warn(
-        `⚠️ Post feed socket closed. Code: ${e.code}, Reason: ${e.reason}`
-      );
+      console.warn(`⚠️ Post feed socket closed. Code: ${e.code}, Reason: ${e.reason}`);
 
     postFeedSocket.onerror = (e) =>
       console.error("🔥 Post feed socket error:", e);
   }
+
+  // Initialize existing posts
+  initializeExistingPosts();
 });
 
-// ✅ Gracefully close socket on page unload
+// Initialize buttons for existing posts on page load
+function initializeExistingPosts() {
+  document.querySelectorAll('[id^="post-"]').forEach(postElement => {
+    initializePostButtons(postElement);
+  });
+}
+
+function initializePostButtons(postElement) {
+  const postId = postElement.id.replace("post-", "");
+
+  // Comment button handler
+  const commentBtn = postElement.querySelector(".comment-btn, .uil-comment-dots");
+  if (commentBtn) {
+    // Remove existing listeners to prevent duplicates
+    commentBtn.removeEventListener("click", handleCommentClick);
+    commentBtn.addEventListener("click", handleCommentClick);
+    
+    function handleCommentClick(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      openCommentPopup(postId);
+    }
+  }
+
+  // Initialize modal for this post
+  const modal = document.getElementById(`commentModal-${postId}`);
+  if (modal) {
+    // Close button
+    const closeBtn = modal.querySelector(".modal-close-btn");
+    if (closeBtn) {
+      closeBtn.removeEventListener("click", handleCloseClick);
+      closeBtn.addEventListener("click", handleCloseClick);
+      
+      function handleCloseClick(e) {
+        e.preventDefault();
+        closeCommentPopup(postId);
+      }
+    }
+
+    // Click outside to close
+    modal.removeEventListener("click", handleModalClick);
+    modal.addEventListener("click", handleModalClick);
+    
+    function handleModalClick(e) {
+      if (e.target === modal) {
+        closeCommentPopup(postId);
+      }
+    }
+
+    // Initialize comment form for this post
+    initializeCommentForm(postId);
+  }
+}
+
+// Like button delegation (keep existing)
 document.getElementById("posts-list").addEventListener("click", function (e) {
   const likeBtn = e.target.closest(".like-btn");
   if (likeBtn) {
@@ -648,9 +633,212 @@ document.getElementById("posts-list").addEventListener("click", function (e) {
   }
 });
 
-// --------------------------------------------
-// Delete post handler using WebSocket sync
-// --------------------------------------------
+// Comment form initialization
+function initializeCommentForm(postId) {
+  const form = document.querySelector(`#commentModal-${postId} .comment-form`);
+  if (!form) return;
+
+  // Initialize WebSocket for comments if not already done
+  if (!commentSockets[postId]) {
+    const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+    commentSockets[postId] = new WebSocket(
+      `${wsProtocol}://${window.location.host}/ws/comments/${postId}/`
+    );
+
+    commentSockets[postId].onopen = () => {
+      console.log(`✅ Comment socket connected for post ${postId}`);
+    };
+
+    commentSockets[postId].onmessage = function (e) {
+      const data = JSON.parse(e.data);
+      console.log("Comment received:", data);
+      
+      const commentSection = document.querySelector(
+        `#commentModal-${postId} .modal-all-comments`
+      );
+      
+      if (commentSection) {
+        const noCommentsMsg = commentSection.querySelector(".no-comments-msg");
+        if (noCommentsMsg) noCommentsMsg.style.display = "none";
+
+        const newComment = document.createElement("div");
+        newComment.classList.add("modal-comment");
+        newComment.innerHTML = `
+          <div class="modal-comment-avatar">
+            <img src="${data.profile_img || '/static/blank_profile_picture.png'}" />
+          </div>
+          <div class="modal-comment-body">
+            <p class="modal-comment-author">${data.username}</p>
+            <p class="modal-comment-text">${data.text}</p>
+          </div>
+        `;
+        commentSection.appendChild(newComment);
+        commentSection.scrollTop = commentSection.scrollHeight;
+      }
+    };
+
+    commentSockets[postId].onerror = (e) => {
+      console.error(`Comment socket error for post ${postId}:`, e);
+    };
+
+    commentSockets[postId].onclose = (e) => {
+      console.warn(`Comment socket closed for post ${postId}:`, e);
+    };
+  }
+
+  // Form submission handler
+  form.removeEventListener("submit", handleFormSubmit);
+  form.addEventListener("submit", handleFormSubmit);
+
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const textInput = form.querySelector('input[name="comment_text"]');
+    const commentText = textInput.value.trim();
+    const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+    const btnText = submitBtn.querySelector(".btn-text");
+    const btnSpinner = submitBtn.querySelector(".btn-spinner");
+
+    if (!commentText) return;
+
+    // Show loading state
+    submitBtn.disabled = true;
+    if (btnText) btnText.style.display = "none";
+    if (btnSpinner) btnSpinner.style.display = "inline";
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({ comment_text: commentText }),
+      });
+
+      if (response.ok) {
+        const socket = commentSockets[postId];
+        if (socket && socket.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify({ text: commentText }));
+        } else {
+          console.error("Comment socket not connected for post:", postId);
+          // Fallback: reload the modal content
+          location.reload();
+        }
+        textInput.value = "";
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || "Failed to post comment");
+      }
+    } catch (error) {
+      console.error("Comment submission error:", error);
+      alert("Failed to connect to server.");
+    } finally {
+      // Restore button state
+      submitBtn.disabled = false;
+      if (btnText) btnText.style.display = "inline";
+      if (btnSpinner) btnSpinner.style.display = "none";
+    }
+  }
+}
+
+// Modal functions
+function openCommentPopup(postId) {
+  const modal = document.getElementById(`commentModal-${postId}`);
+  if (modal) {
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+    
+    // Initialize slider for this modal
+    initializeSlider(postId);
+    
+    console.log(`Opening modal for post ${postId}`);
+  } else {
+    console.error(`Modal not found for post ${postId}`);
+  }
+}
+
+function closeCommentPopup(postId) {
+  const modal = document.getElementById(`commentModal-${postId}`);
+  if (modal) {
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+  }
+}
+
+// Slider initialization per modal
+function initializeSlider(postId) {
+  const modal = document.getElementById(`commentModal-${postId}`);
+  if (!modal) return;
+
+  const slider = modal.querySelector(".modal-image-slider");
+  const slides = modal.querySelectorAll(".modal-image-slide");
+  const prevBtn = modal.querySelector(".prev-slide");
+  const nextBtn = modal.querySelector(".next-slide");
+  const dotsContainer = modal.querySelector(".slide-dots");
+
+  if (!slider || slides.length === 0) return;
+
+  let currentSlide = 0;
+
+  function showSlide(n) {
+    currentSlide = Math.max(0, Math.min(n, slides.length - 1));
+    slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+    
+    if (prevBtn) prevBtn.disabled = currentSlide === 0;
+    if (nextBtn) nextBtn.disabled = currentSlide === slides.length - 1;
+    
+    updateDots();
+  }
+
+  function updateDots() {
+    const dots = modal.querySelectorAll(".slide-dot");
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("active", index === currentSlide);
+    });
+  }
+
+  function createDots() {
+    if (!dotsContainer) return;
+    dotsContainer.innerHTML = "";
+    slides.forEach((_, index) => {
+      const dot = document.createElement("div");
+      dot.classList.add("slide-dot");
+      dot.addEventListener("click", () => showSlide(index));
+      dotsContainer.appendChild(dot);
+    });
+  }
+
+  // Event listeners
+  if (prevBtn) {
+    prevBtn.removeEventListener("click", prevSlide);
+    prevBtn.addEventListener("click", prevSlide);
+  }
+  
+  if (nextBtn) {
+    nextBtn.removeEventListener("click", nextSlide);
+    nextBtn.addEventListener("click", nextSlide);
+  }
+
+  function prevSlide() {
+    showSlide(currentSlide - 1);
+  }
+
+  function nextSlide() {
+    showSlide(currentSlide + 1);
+  }
+
+  // Initialize
+  createDots();
+  showSlide(0);
+}
+
+// Comment sockets object
+const commentSockets = {};
+
+// Delete post function
 function deletePost(postId) {
   if (!confirm("Are you sure you want to delete this post?")) return;
 
@@ -677,7 +865,7 @@ function deletePost(postId) {
     .catch(() => alert("Error deleting post."));
 }
 
-// Real-time time ago update
+// Time update function
 function updateTimeSince() {
   document.querySelectorAll(".post-time").forEach((el) => {
     const createdAt = new Date(el.dataset.createdAt);
@@ -699,14 +887,27 @@ function updateTimeSince() {
   });
 }
 
-setInterval(updateTimeSince, 60000);
-updateTimeSince();
-
-// Utility to get CSRF token from cookie
+// Utility functions
 function getCSRFToken() {
   const cookie = document.cookie
     .split(";")
     .find((c) => c.trim().startsWith("csrftoken="));
   return cookie ? cookie.split("=")[1] : "";
 }
-//end of post feed  deletion realtime-------
+
+// Initialize time updates
+setInterval(updateTimeSince, 60000);
+updateTimeSince();
+
+// Close sockets on page unload
+window.addEventListener("beforeunload", () => {
+  Object.values(commentSockets).forEach(socket => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.close();
+    }
+  });
+  
+  if (postFeedSocket && postFeedSocket.readyState === WebSocket.OPEN) {
+    postFeedSocket.close();
+  }
+});

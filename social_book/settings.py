@@ -116,16 +116,21 @@ CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL') # This loads the full URL from
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' # GOOD, this is correct.
 
-# CHANNELS (Redis)
-REDIS_URL = os.environ.get("REDIS_URL")
+# CHANNELS (Redis) na pulihan ini diri haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa--------
+import os
+
+REDIS_URL = os.environ.get("REDIS_URL", "redis://127.0.0.1:6379")
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL],
+            "hosts": [REDIS_URL],  # Now this works
         },
     },
 }
+
+
 
 # These print statements are helpful for debugging on Render logs
 print("DEBUG:", DEBUG) # Add this to see if DEBUG is True/False
