@@ -5,7 +5,12 @@
   <div class="head">
     <div class="user" style="display: flex; align-items: center; gap: 10px">
       <div class="profile-photo">
-        <img src="{% if post.user.profile.profileimg %}{{ post.user.profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}" />
+        <img src="
+        {% if post.user.profile.profileimg %}
+          {{ post.user.profile.profileimg.url }}
+        {% else %}
+          {% static 'blank_profile_picture.png' %}
+        {% endif %}" />
       </div>
       <div class="info">
         <h3 style="display: flex; align-items: center; gap: 6px">
@@ -107,7 +112,12 @@
     <div class="modal-profile-info">
       <div class="modal-user">
         <div class="modal-profile-photo">
-          <img src="{% if post.user.profile.profileimg %}{{ post.user.profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}" />
+          <img src="
+          {% if post.user.profile.profileimg %}
+            {{ post.user.profile.profileimg.url }}
+          {% else %}
+          {% static 'blank_profile_picture.png' %}
+          {% endif %}" />
         </div>
         <div class="modal-info">
           <h3>{{ post.user.username }}</h3>

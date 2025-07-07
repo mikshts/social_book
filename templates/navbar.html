@@ -22,7 +22,12 @@
       <a href="{%url 'profile' %}"
         ><div class="profile-photo">
           <img
-            src="{% if user.profile.profileimg %}{{ user.profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}"
+            src="
+            {% if user.profile.profileimg %}
+              {{ user.profile.profileimg.url }}
+            {% else %}
+              {{ static 'blank_profile_picture.png' }}
+            {% endif %}"
             alt="Profile" /></div
       ></a>
     </div>

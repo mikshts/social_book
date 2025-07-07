@@ -1,120 +1,124 @@
 {% load static %}
 
 <div class="left">
-    <a class="profile">
-        <div
-            class="user"
-            style="display: flex; align-items: center; gap: 10px">
-            <div class="profile-photo" style="position: relative">
-            <img src="{% if user.profile.profileimg %}{{ user.profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}" />
-            </div>
-        </div>
+  <a class="profile">
+    <div class="user" style="display: flex; align-items: center; gap: 10px">
+      <div class="profile-photo" style="position: relative">
+        <img
+          src="
+            {% if  %}
+                {{ user.profile.profileimg.url }}
+            {% else %}
+            {% static 'blank_profile_picture.png' %}
+            {% endif %}" />
+      </div>
+    </div>
 
-        <div class="name">
-            <h4 style="display: flex; align-items: center; gap: 6px">
-            {{ user.username }} {% if user.profile.is_online %}
-            <span class="online-dot"></span>
-            {% elif user.profile.is_offline %}
-            <span class="offline-dot"></span>
-            {% endif %}
-            </h4>
-            <small class="text-muted">{{ user.profile.bio }}</small>
+    <div class="name">
+      <h4 style="display: flex; align-items: center; gap: 6px">
+        {{ user.username }} {% if user.profile.is_online %}
+        <span class="online-dot"></span>
+        {% elif user.profile.is_offline %}
+        <span class="offline-dot"></span>
+        {% endif %}
+      </h4>
+      <small class="text-muted">{{ user.profile.bio }}</small>
+    </div>
+  </a>
+
+  <!----------------- SIDEBAR -------------------->
+  <div class="sidebar">
+    <a class="menu-item active" href="{%url 'index'%}">
+      <span><i class="uil uil-home"></i></span>
+      <h3>Home</h3>
+    </a>
+    <a class="menu-item" href="{%url 'explore'%}">
+      <span><i class="uil uil-compass"></i></span>
+      <h3>Explore</h3>
+    </a>
+    <a class="menu-item" id="notifications">
+      <span
+        ><i class="uil uil-bell"
+          ><small class="notification-count">9+</small></i
+        ></span
+      >
+      <h3>Notification</h3>
+      <!--------------- NOTIFICATION POPUP --------------->
+      <div class="notifications-popup">
+        <div>
+          <div class="profile-photo">
+            <img src="{%static 'assets/images/profile-2.jpg'%}" />
+          </div>
+          <div class="notification-body">
+            <b>Keke Benjamin</b> accepted your friend request
+            <small class="text-muted">2 Days Ago</small>
+          </div>
         </div>
+        <div>
+          <div class="profile-photo">
+            <img src="{%static 'assets/images/profile-3.jpg'%}" />
+          </div>
+          <div class="notification-body">
+            <b>John Doe</b> commented on your post
+            <small class="text-muted">1 Hour Ago</small>
+          </div>
+        </div>
+        <div>
+          <div class="profile-photo">
+            <img src="{%static 'assets/images/profile-4.jpg'%}" />
+          </div>
+          <div class="notification-body">
+            <b>Marry Oppong</b> and <b>283 Others</b> liked your post
+            <small class="text-muted">4 Minutes Ago</small>
+          </div>
+        </div>
+        <div>
+          <div class="profile-photo">
+            <img src="{%static 'assets/images/profile-5.jpg'%}" />
+          </div>
+          <div class="notification-body">
+            <b>Doris Y. Lartey</b> commented on a post you are tagged in
+            <small class="text-muted">2 Days Ago</small>
+          </div>
+        </div>
+        <div>
+          <div class="profile-photo">
+            <img src="{%static 'assets/images/profile-6.jpg'%}" />
+          </div>
+          <div class="notification-body">
+            <b>Keyley Jenner</b> commented on a post you are tagged in
+            <small class="text-muted">1 Hour Ago</small>
+          </div>
+        </div>
+        <div>
+          <div class="profile-photo">
+            <img src="{%static 'assets/images/profile-7.jpg'%}" />
+          </div>
+          <div class="notification-body">
+            <b>Jane Doe</b> commented on your post
+            <small class="text-muted">1 Hour Ago</small>
+          </div>
+        </div>
+      </div>
+      <!--------------- END NOTIFICATION POPUP --------------->
     </a>
 
-    <!----------------- SIDEBAR -------------------->
-    <div class="sidebar">
-        <a class="menu-item active" href="{%url 'index'%}">
-            <span><i class="uil uil-home"></i></span>
-            <h3>Home</h3>
-        </a>
-        <a class="menu-item" href="{%url 'explore'%}">
-            <span><i class="uil uil-compass"></i></span>
-            <h3>Explore</h3>
-        </a>
-        <a class="menu-item" id="notifications">
-            <span
-            ><i class="uil uil-bell"
-                ><small class="notification-count">9+</small></i
-            ></span
-            >
-            <h3>Notification</h3>
-            <!--------------- NOTIFICATION POPUP --------------->
-            <div class="notifications-popup">
-            <div>
-                <div class="profile-photo">
-                <img src="{%static 'assets/images/profile-2.jpg'%}" />
-                </div>
-                <div class="notification-body">
-                <b>Keke Benjamin</b> accepted your friend request
-                <small class="text-muted">2 Days Ago</small>
-                </div>
-            </div>
-            <div>
-                <div class="profile-photo">
-                <img src="{%static 'assets/images/profile-3.jpg'%}" />
-                </div>
-                <div class="notification-body">
-                <b>John Doe</b> commented on your post
-                <small class="text-muted">1 Hour Ago</small>
-                </div>
-            </div>
-            <div>
-                <div class="profile-photo">
-                <img src="{%static 'assets/images/profile-4.jpg'%}" />
-                </div>
-                <div class="notification-body">
-                <b>Marry Oppong</b> and <b>283 Others</b> liked your post
-                <small class="text-muted">4 Minutes Ago</small>
-                </div>
-            </div>
-            <div>
-                <div class="profile-photo">
-                <img src="{%static 'assets/images/profile-5.jpg'%}" />
-                </div>
-                <div class="notification-body">
-                <b>Doris Y. Lartey</b> commented on a post you are tagged in
-                <small class="text-muted">2 Days Ago</small>
-                </div>
-            </div>
-            <div>
-                <div class="profile-photo">
-                <img src="{%static 'assets/images/profile-6.jpg'%}" />
-                </div>
-                <div class="notification-body">
-                <b>Keyley Jenner</b> commented on a post you are tagged in
-                <small class="text-muted">1 Hour Ago</small>
-                </div>
-            </div>
-            <div>
-                <div class="profile-photo">
-                <img src="{%static 'assets/images/profile-7.jpg'%}" />
-                </div>
-                <div class="notification-body">
-                <b>Jane Doe</b> commented on your post
-                <small class="text-muted">1 Hour Ago</small>
-                </div>
-            </div>
-            </div>
-            <!--------------- END NOTIFICATION POPUP --------------->
-        </a>
-
-        <a class="menu-item" href="{%url 'bookmarks'%}">
-            <span><i class="uil uil-bookmark"></i></span>
-            <h3>Bookmarks</h3>
-        </a>
-        <a class="menu-item" href="{%url 'analytics'%}">
-            <span><i class="uil uil-chart-line"></i></span>
-            <h3>Analytics</h3>
-        </a>
-        <a class="menu-item" id="theme">
-            <span><i class="uil uil-palette"></i></span>
-            <h3>Theme</h3>
-        </a>
-        <a class="menu-item" href="{%url 'settings'%}">
-            <span><i class="uil uil-setting"></i></span>
-            <h3>Setting</h3>
-        </a>
-    </div>
-    <!----------------- END OF SIDEBAR -------------------->
+    <a class="menu-item" href="{%url 'bookmarks'%}">
+      <span><i class="uil uil-bookmark"></i></span>
+      <h3>Bookmarks</h3>
+    </a>
+    <a class="menu-item" href="{%url 'analytics'%}">
+      <span><i class="uil uil-chart-line"></i></span>
+      <h3>Analytics</h3>
+    </a>
+    <a class="menu-item" id="theme">
+      <span><i class="uil uil-palette"></i></span>
+      <h3>Theme</h3>
+    </a>
+    <a class="menu-item" href="{%url 'settings'%}">
+      <span><i class="uil uil-setting"></i></span>
+      <h3>Setting</h3>
+    </a>
+  </div>
+  <!----------------- END OF SIDEBAR -------------------->
 </div>
