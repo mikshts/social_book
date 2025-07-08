@@ -12,7 +12,9 @@
     <div class="chat-container">
       <header class="chat-header">
         <div style="display: flex; align-items: center; gap: 12px">
-          <img src="{% if receiver.profile.profileimg %}{{ receiver.profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}" alt="{{ receiver.username }}'s profile photo"
+          <img
+            src="{% if receiver.profile.profileimg.name %}{{ receiver.profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}"
+            alt="{{ receiver.username }}'s profile photo"
             style="
               width: 40px;
               height: 40px;
@@ -20,7 +22,6 @@
               object-fit: cover;
               border: 2px solid white;
             " />
-
           <h2 style="margin: 0">{{ receiver.username }}</h2>
         </div>
       </header>

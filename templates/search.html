@@ -9,25 +9,21 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
       rel="stylesheet" />
-    <link rel="stylesheet" href="{%static 'assets/css/search.css'%}" />
-    <link rel="stylesheet" href="{%static 'assets/css/style.css'%}" />
+    <link rel="stylesheet" href="{% static 'assets/css/search.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
   </head>
   <body>
-    <!--sayop delete lang-->
-
-    {%include 'navbar.html'%}
-    <!--sayop-->
+    {% include 'navbar.html' %}
 
     <main class="search-container">
       <h1 class="search-title">Search Results for "{{ query }}"</h1>
 
       {% if profiles %}
       <div class="results-grid">
-        <!-- <-- Add this wrapper -->
         {% for profile in profiles %}
         <div class="result-card">
           <img
-            src="{{ profile.profileimg.url }}"
+            src="{% if profile.profileimg.name %}{{ profile.profileimg.url }}{% else %}{% static 'blank_profile_picture.png' %}{% endif %}"
             alt="{{ profile.user.username }}" />
           <div class="result-info">
             <h3>{{ profile.user.username }}</h3>
@@ -44,7 +40,6 @@
         </div>
         {% endfor %}
       </div>
-      <!-- <-- Close the wrapper -->
       {% else %}
       <p>No users found.</p>
       {% endif %}
