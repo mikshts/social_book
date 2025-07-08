@@ -112,12 +112,10 @@
     <div class="modal-profile-info">
       <div class="modal-user">
         <div class="modal-profile-photo">
-          <img src="
-          {% if post.user.profile.profileimg %}
-            {{ post.user.profile.profileimg.url }}
-          {% else %}
-          {% static 'blank_profile_picture.png' %}
-          {% endif %}" />  <!-- usabonon -->
+        <img 
+          src="{{ post.user.profile.profileimg.url|default:static('blank_profile_picture.png') }}" 
+          alt="Profile" />
+ <!-- usabonon -->
         </div>
         <div class="modal-info">
           <h3>{{ post.user.username }}</h3>

@@ -22,21 +22,14 @@
       <a href="{%url 'profile' %}">
         <div class="profile-photo">
           <img
-            src="
-            {% if user.profile.profileimg.name %}
-              {{ user.profile.profileimg.url }}
-            {% else %}
-<<<<<<< HEAD
-              {{ static 'blank_profile_picture.png' }}
-            {% endif %}" alt="Profile" /></div
-      ></a>
-=======
-              {% static 'blank_profile_picture.png' %}
-            {% endif %}"
-            alt="Profile" />
+            src="{% if user.profile.profileimg %}
+                    {{ user.profile.profileimg.url }}
+                  {% else %}
+                    {% static 'blank_profile_picture.png' %}
+                  {% endif %}"
+            alt="{{ user.username }}'s profile picture" />
         </div>
       </a><!-- usabonon-->
->>>>>>> 73c0ee8c9440c28f4d9cb7d01049ae038864f664
     </div>
   </div>
 </nav>
