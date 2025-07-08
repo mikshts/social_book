@@ -4,13 +4,8 @@
     <div class="message" data-user-id="{{ chat_user.id }}">
       <div class="profile-photo">
         <img
-          src="{% if chat_user.profile.profileimg %}
-                {{ chat_user.profile.profileimg.url }}
-              {% else %}
-                {% static 'blank_profile_picture.png' %}
-              {% endif %}"
+          src="{{ chat_user.profile.profileimg.url }}"
           alt="{{ chat_user.username }}" />
-
       </div>
       <div class="message-body">
         <h5>{{ chat_user.username }}</h5>

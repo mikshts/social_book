@@ -5,26 +5,23 @@
   <div class="head">
     <div class="user" style="display: flex; align-items: center; gap: 10px">
       <div class="profile-photo">
-        <img
-          src="
+        <img src="
         {% if post.user.profile.profileimg %}
           {{ post.user.profile.profileimg.url }}
         {% else %}
           {% static 'blank_profile_picture.png' %}
         {% endif %}" />
-        <!-- usabonon -->
       </div>
       <div class="info">
         <h3 style="display: flex; align-items: center; gap: 6px">
-          {{ post.user.username }} {% if post.user.profile.is_online %}
+          {{ post.user.username }} 
+          {% if post.user.profile.is_online %}
           <span class="online-dot"></span>
           {% else %}
           <span class="offline-dot"></span>
           {% endif %}
         </h3>
-        <small
-          class="post-time"
-          data-created-at="{{ post.created_at|date:'c' }}">
+        <small class="post-time" data-created-at="{{ post.created_at|date:'c' }}">
           {{ post.created_at|timesince }} ago
         </small>
         |
@@ -34,21 +31,13 @@
 
     {% if user != post.user %}
     <span class="chat">
-      <button
-        type="button"
-        title="Chat"
-        class="chat-btn"
-        onclick="openChat('{{ post.user.id }}')">
+      <button type="button" title="Chat" class="chat-btn" onclick="openChat('{{ post.user.id }}')">
         <span class="material-symbols-outlined">chat</span>
       </button>
     </span>
     {% else %}
     <span class="edit">
-      <button
-        type="button"
-        title="Delete"
-        style="all: unset; cursor: pointer"
-        onclick="deletePost('{{ post.id }}')">
+      <button type="button" title="Delete" style="all: unset; cursor: pointer" onclick="deletePost('{{ post.id }}')">
         <span class="material-symbols-outlined">delete</span>
       </button>
     </span>
@@ -71,11 +60,7 @@
   <div class="action-buttons">
     <div class="interaction-buttons">
       <!-- Like Button -->
-      <span
-        id="like-btn-{{ post.id }}"
-        class="like-btn"
-        data-post-id="{{ post.id }}"
-        title="Like">
+      <span id="like-btn-{{ post.id }}" class="like-btn" data-post-id="{{ post.id }}" title="Like">
         <i class="uil uil-heart {% if post.user_liked %}liked{% endif %}"></i>
       </span>
 
@@ -93,38 +78,33 @@
     <!-- Bookmark Button -->
     <div class="bookmark">
       <span onclick="toggleBookmark('{{ post.id }}', this)">
-        <i
-          class="uil uil-bookmark-full {% if post.bookmarked %}bookmarked{% endif %}"></i>
+        <i class="uil uil-bookmark-full {% if post.bookmarked %}bookmarked{% endif %}"></i>
       </span>
     </div>
   </div>
 
   <!-- Like Section -->
-  <div
-    class="like-section"
-    id="liked-by-{{ post.id }}"
-    data-post-id="{{ post.id }}">
+  <div class="like-section" id="liked-by-{{ post.id }}" data-post-id="{{ post.id }}">
     <div class="like-section-content">
       {% if post.liked_users %}
       <span>Liked by</span>
       <div class="like-section-users">
         {% for user in post.liked_users %}
-        <img
-          src="{{ user.profile.profileimg.url }}"
-          alt="{{ user.username }}" />
+        <img src="{{ user.profile.profileimg.url }}" alt="{{ user.username }}" />
         {% endfor %}
       </div>
       <span>and</span>
       <span id="like-count-{{ post.id }}">{{ post.no_of_likes }}</span>
       <span>others</span>
       {% else %}
-      <span id="like-count-{{ post.id }}">0</span> likes {% endif %}
+      <span id="like-count-{{ post.id }}">0</span> likes
+      {% endif %}
     </div>
   </div>
 </div>
 
 <!-- COMMENT MODAL -->
-<div class="feed-modal" id="commentModal-{{ post.id }}" style="display: none">
+<div class="feed-modal" id="commentModal-{{ post.id }}" style="display: none;">
   <div class="modal-content" onclick="event.stopPropagation()">
     <span class="modal-close-btn">&times;</span>
 
@@ -132,16 +112,16 @@
     <div class="modal-profile-info">
       <div class="modal-user">
         <div class="modal-profile-photo">
-          <img
-            src="{{ post.user.profile.profileimg.url|default:static('blank_profile_picture.png') }}"
-            alt="Profile" />
-          <!-- usabonon -->
+          <img src="
+          {% if post.user.profile.profileimg %}
+            {{ post.user.profile.profileimg.url }}
+          {% else %}
+          {% static 'blank_profile_picture.png' %}
+          {% endif %}" />
         </div>
         <div class="modal-info">
           <h3>{{ post.user.username }}</h3>
-          <small
-            class="post-time"
-            data-created-at="{{ post.created_at|date:'c' }}">
+          <small class="post-time" data-created-at="{{ post.created_at|date:'c' }}">
             {{ post.created_at|timesince }} ago
           </small>
           |
@@ -177,11 +157,7 @@
           {% for comment in post.comments.all %}
           <div class="modal-comment">
             <div class="modal-comment-avatar">
-              {% if comment.user.profile.profileimg %}
-              <img src="{{ comment.user.profile.profileimg.url }}" />
-              {% else %}
-              <img src="{% static 'blank_profile_picture.png' %}" />
-              {% endif %}
+              <img src="{{ comment.user.profile.profileimg.url|default:'/static/blank_profile_picture.png' }}" />
             </div>
             <div class="modal-comment-body">
               <p class="modal-comment-author">{{ comment.user.username }}</p>
@@ -194,19 +170,10 @@
         </div>
 
         <!-- Comment Input -->
-        <form
-          method="POST"
-          action="{% url 'add_comment' post.id %}"
-          class="comment-form"
-          data-post-id="{{ post.id }}">
+        <form method="POST" action="{% url 'add_comment' post.id %}" class="comment-form" data-post-id="{{ post.id }}">
           {% csrf_token %}
           <div class="modal-comment-input-area">
-            <input
-              type="text"
-              name="comment_text"
-              id="comment-input-{{ post.id }}"
-              placeholder="Add a comment..."
-              required />
+            <input type="text" name="comment_text" id="comment-input-{{ post.id }}" placeholder="Add a comment..." required />
             <button type="submit">
               <span class="btn-text">Send</span>
               <span class="btn-spinner" style="display: none">⏳</span>

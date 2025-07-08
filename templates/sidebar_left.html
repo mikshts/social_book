@@ -4,14 +4,13 @@
   <a class="profile">
     <div class="user" style="display: flex; align-items: center; gap: 10px">
       <div class="profile-photo" style="position: relative">
-      <img
-        src="{% if user.profile.profileimg %}
+        <img
+          src="
+            {% if  %}
                 {{ user.profile.profileimg.url }}
-              {% else %}
-                {% static 'blank_profile_picture.png' %}
-              {% endif %}"
-        alt="{{ user.username }}'s profile picture"
-      />
+            {% else %}
+            {% static 'blank_profile_picture.png' %}
+            {% endif %}" />
       </div>
     </div>
 
