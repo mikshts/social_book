@@ -80,6 +80,7 @@
                   no-repeat center center/cover;
               ">
               <div class="profile-photo">
+<<<<<<< HEAD
                 <img src="
                   {% if user.profile.profileimg.name %}
                     {{ user.profile.profileimg.url }}
@@ -88,6 +89,15 @@
                   {% endif %}" alt="Profile" />
 
               </div>
+=======
+               <img src="
+               {% if user.profile.profileimg %}
+                {{ user.profile.profileimg.url }}
+               {% else %}
+                {% static 'blank_profile_picture.png' %}
+               {% endif %}" alt="Profile" /> <!-- usabonon -->
+              </div> <!-- Profile photo -->
+>>>>>>> 73c0ee8c9440c28f4d9cb7d01049ae038864f664
               <p class="name">Your Story</p>
             </div>
 
@@ -254,12 +264,21 @@
           <div class="dating-create-post-trigger" id="dating-open-modal">
             <div class="profile-photo">
               <img src="
+<<<<<<< HEAD
                 {% if user.profile.profileimg.name %}
                   {{ user.profile.profileimg.url }}
                 {% else %}
                   {% static 'blank_profile_picture.png' %}
                 {% endif %}" alt="Profile" />
             </div>
+=======
+              {% if user.profile.profileimg %}
+                {{ user.profile.profileimg.url }}
+              {% else %}
+                {% static 'blank_profile_picture.png' %}
+              {% endif %}" alt="Profile" />
+            </div>  <!-- usabonon -->
+>>>>>>> 73c0ee8c9440c28f4d9cb7d01049ae038864f664
 
             <div class="post-input-wrapper">
               <span class="animated-prompt">
