@@ -6,9 +6,6 @@ import uuid
 # ---------------------------
 # Profile
 # ---------------------------
-# ---------------------------
-# Profile
-# ---------------------------
 class Profile(models.Model):
     RELATIONSHIP_CHOICES = [
         ('single', 'Single'),
