@@ -26,6 +26,13 @@ a:visited {
   padding: 20px;
   text-align: center;
 }
+.auth-sidebar img {
+  flex: 1 1 300px;
+  max-width: 400px;
+  display: flex;
+
+}
+
 
 .auth-sidebar .logo {
   font-size: clamp(1.5rem, 3vw, 2.5rem);
