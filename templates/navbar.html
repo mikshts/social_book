@@ -19,18 +19,17 @@
     </div>
 
     <div class="profile-photo">
-      <a href="{%url 'profile' %}">
-        <div class="profile-photo">
+      <a href="{%url 'profile' %}"
+        ><div class="profile-photo">
           <img
             src="
             {% if user.profile.profileimg %}
               {{ user.profile.profileimg.url }}
             {% else %}
-              {% static 'blank_profile_picture.png' %}
+              {{ static 'blank_profile_picture.png' }}
             {% endif %}"
-            alt="Profile" />
-        </div>
-      </a><!-- usabonon-->
+            alt="Profile" /></div
+      ></a>
     </div>
   </div>
 </nav>

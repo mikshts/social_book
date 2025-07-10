@@ -23,6 +23,12 @@ function closeCommentPopup(postId) {
   }
 }
 
+if (socket.readyState !== WebSocket.OPEN) {
+  console.warn("Socket not open, will retry...");
+  // Optional retry logic or silent fail
+}
+
+
 // Close modal when clicking background
 document.querySelectorAll("[id^='commentModal-']").forEach((modal) => {
   modal.addEventListener("click", function (e) {
